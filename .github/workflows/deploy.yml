@@ -24,9 +24,9 @@ jobs:
             BRANCH="${{ github.ref_name }}"
 
             if [ "$BRANCH" = "main" ]; then
-              PORT=9040
+              PORT=9050
             elif [ "$BRANCH" = "staging" ]; then
-              PORT=9041
+              PORT=9051
             else
               echo "Unsupported branch"
               exit 1
