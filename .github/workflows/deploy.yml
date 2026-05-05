@@ -32,10 +32,10 @@ jobs:
               exit 1
             fi
 
-            APP_DIR="/www/wwwroot/it-admin-api"
+            APP_DIR="/www/wwwroot/it-inventory-management"
 
             if [ ! -d "$APP_DIR" ]; then
-              git clone https://github.com/YOUR_REPO.git $APP_DIR
+              git clone https://github.com/jhsassociatesllp/IT-Inventory-Management.git $APP_DIR
             fi
 
             cd $APP_DIR
