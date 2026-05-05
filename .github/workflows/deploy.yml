@@ -51,4 +51,3 @@ jobs:
             MONGO_URI=${{ secrets.MONGO_URI }} \
             MONGO_DB=${{ secrets.MONGO_DB }} \
             docker compose up -d --build --force-recreate
-            
