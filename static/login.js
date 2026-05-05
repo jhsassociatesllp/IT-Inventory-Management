@@ -7,7 +7,8 @@
 // ============================================================================
 
 // Backend API URL - Change this if your backend is running on different port
-const API_BASE_URL = "http://localhost:8000";
+// const API_BASE_URL = "http://localhost:8000";
+const API_BASE_URL = "";
 
 // Dashboard redirect page
 const DASHBOARD_PAGE = "/static/index.html";

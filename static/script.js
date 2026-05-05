@@ -3396,7 +3396,8 @@
    Added: "model" field to Employee Entry (Add, Update, History, Modal)
    ===================================================== */
 
-const API = "http://localhost:8000";
+// const API = "http://localhost:8000";
+const API = ""
 
 // =====================================================
 // Utility: API fetch wrapper
