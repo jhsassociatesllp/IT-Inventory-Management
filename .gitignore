@@ -1,0 +1,37 @@
+# Python
+__pycache__/
+*.pyc
+
+# Virtual env
+venv/
+env/
+
+# Secrets
+.env
+.env.*
+
+# Logs
+*.log
+
+# DB
+*.db
+*.sqlite3
+
+# Uploads / static build
+uploads/
+staticfiles/
+
+# IDE
+.vscode/
+.idea/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker override
+docker-compose.override.yml
+
+# Temp
+tmp/
+temp/

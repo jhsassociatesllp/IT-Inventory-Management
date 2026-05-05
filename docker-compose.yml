@@ -1,0 +1,10 @@
+services:
+  it-admin-api:
+    build: .
+    container_name: it_admin_api
+    ports:
+      - "${APP_PORT}:9050"
+    environment:
+      - MONGO_URI=${MONGO_URI}
+      - MONGO_DB=${MONGO_DB}
+    restart: always

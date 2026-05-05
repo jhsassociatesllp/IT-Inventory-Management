@@ -1,0 +1,192 @@
+/* =====================================================
+   JHS IT Admin - Custom Styles  v3.1
+   Added: model column widths for addTable & updateTable
+   ===================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
+
+/* Base */
+body {
+  font-family: "Inter", sans-serif;
+}
+
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  height: 100%;
+}
+
+/* =====================================================
+   Layout
+   ===================================================== */
+.app-container {
+  display: flex;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+.sidebar {
+  width: 320px;
+  min-width: 320px;
+  max-width: 320px;
+  flex-shrink: 0;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+  min-width: 0;
+}
+
+.content-wrapper {
+  width: 100%;
+  max-width: 100%;
+}
+
+.table-responsive {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: visible;
+}
+
+/* =====================================================
+   Sidebar Buttons
+   ===================================================== */
+.sidebar-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  text-align: left;
+  color: #374151;
+  font-weight: 500;
+  border-radius: 0.75rem;
+  transition: all 0.2s;
+}
+
+:root.dark .sidebar-btn {
+  color: #9ca3af;
+}
+
+.sidebar-btn:hover {
+  background: rgba(252, 165, 165, 0.2);
+}
+
+:root.dark .sidebar-btn:hover {
+  background: rgba(239, 68, 68, 0.2);
+}
+
+.sidebar-btn.active {
+  background: rgba(252, 165, 165, 0.3);
+  border-left: 5px solid #ef4444;
+  font-weight: 600;
+  color: #991b1b;
+}
+
+:root.dark .sidebar-btn.active {
+  background: rgba(239, 68, 68, 0.3);
+  border-left: 5px solid #f87171;
+  color: #f87171;
+}
+
+/* =====================================================
+   Tab Buttons
+   ===================================================== */
+.tab-btn {
+  transition: all 0.3s;
+}
+
+.tab-btn.active {
+  background: linear-gradient(to right, #ef4444, #f43f5e);
+  color: white !important;
+  font-weight: 600;
+  box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
+}
+
+/* =====================================================
+   Wave Animation
+   ===================================================== */
+@keyframes wave {
+  0%, 100% { transform: rotate(0deg); }
+  25%       { transform: rotate(20deg); }
+  50%       { transform: rotate(-10deg); }
+  75%       { transform: rotate(15deg); }
+}
+
+.animate-wave {
+  display: inline-block;
+  animation: wave 2s infinite;
+  transform-origin: 70% 70%;
+}
+
+/* =====================================================
+   Confirm Dialog Animation
+   ===================================================== */
+#__confirm_box__ {
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+/* =====================================================
+   Add New Entry Table (#addTable)
+   13 columns:
+   1=S.No  2=View  3=JHS Code  4=Date  5=Name
+   6=Contact  7=Model  8=Processor  9=RAM  10=SSD
+   11=Mouse  12=Other  13=Action
+   ===================================================== */
+#addTable th:nth-child(1),  #addTable td:nth-child(1)  { min-width: 60px; }
+#addTable th:nth-child(2),  #addTable td:nth-child(2)  { min-width: 60px; }
+#addTable th:nth-child(3),  #addTable td:nth-child(3)  { min-width: 200px; }
+#addTable th:nth-child(4),  #addTable td:nth-child(4)  { min-width: 180px; }
+#addTable th:nth-child(5),  #addTable td:nth-child(5)  { min-width: 200px; }
+#addTable th:nth-child(6),  #addTable td:nth-child(6)  { min-width: 180px; }
+#addTable th:nth-child(7),  #addTable td:nth-child(7)  { min-width: 220px; } /* Model — new */
+#addTable th:nth-child(8),  #addTable td:nth-child(8)  { min-width: 200px; }
+#addTable th:nth-child(9),  #addTable td:nth-child(9)  { min-width: 160px; }
+#addTable th:nth-child(10), #addTable td:nth-child(10) { min-width: 160px; }
+#addTable th:nth-child(11), #addTable td:nth-child(11) { min-width: 180px; }
+#addTable th:nth-child(12), #addTable td:nth-child(12) { min-width: 180px; }
+#addTable th:nth-child(13), #addTable td:nth-child(13) { min-width: 100px; }
+
+/* =====================================================
+   Update Entry Table (#updateTable)
+   11 columns (no S.No/View/Action in update form):
+   1=JHSCode  2=Date  3=Name  4=Contact  5=Status
+   6=Model  7=Processor  8=RAM  9=SSD  10=Mouse  11=Other
+   ===================================================== */
+#updateTable th:nth-child(1),  #updateTable td:nth-child(1)  { min-width: 180px; }
+#updateTable th:nth-child(2),  #updateTable td:nth-child(2)  { min-width: 180px; }
+#updateTable th:nth-child(3),  #updateTable td:nth-child(3)  { min-width: 200px; }
+#updateTable th:nth-child(4),  #updateTable td:nth-child(4)  { min-width: 180px; }
+#updateTable th:nth-child(5),  #updateTable td:nth-child(5)  { min-width: 160px; }
+#updateTable th:nth-child(6),  #updateTable td:nth-child(6)  { min-width: 220px; } /* Model — new */
+#updateTable th:nth-child(7),  #updateTable td:nth-child(7)  { min-width: 200px; }
+#updateTable th:nth-child(8),  #updateTable td:nth-child(8)  { min-width: 160px; }
+#updateTable th:nth-child(9),  #updateTable td:nth-child(9)  { min-width: 160px; }
+#updateTable th:nth-child(10), #updateTable td:nth-child(10) { min-width: 180px; }
+#updateTable th:nth-child(11), #updateTable td:nth-child(11) { min-width: 180px; }
+
+/* =====================================================
+   Inventory Add Table (#inventoryAddTable)
+   ===================================================== */
+#inventoryAddTable th:nth-child(1), #inventoryAddTable td:nth-child(1) { min-width: 60px; }
+#inventoryAddTable th:nth-child(2), #inventoryAddTable td:nth-child(2) { min-width: 60px; }
+#inventoryAddTable th:nth-child(3), #inventoryAddTable td:nth-child(3) { min-width: 200px; }
+#inventoryAddTable th:nth-child(4), #inventoryAddTable td:nth-child(4) { min-width: 200px; }
+#inventoryAddTable th:nth-child(5), #inventoryAddTable td:nth-child(5) { min-width: 200px; }
+#inventoryAddTable th:nth-child(6), #inventoryAddTable td:nth-child(6) { min-width: 160px; }
+#inventoryAddTable th:nth-child(7), #inventoryAddTable td:nth-child(7) { min-width: 160px; }
+#inventoryAddTable th:nth-child(8), #inventoryAddTable td:nth-child(8) { min-width: 100px; }
+
+/* =====================================================
+   Repair Table (#repairTable)
+   ===================================================== */
+#repairTable th:nth-child(1), #repairTable td:nth-child(1) { min-width: 200px; }
+#repairTable th:nth-child(2), #repairTable td:nth-child(2) { min-width: 220px; }
+#repairTable th:nth-child(3), #repairTable td:nth-child(3) { min-width: 180px; }
+#repairTable th:nth-child(4), #repairTable td:nth-child(4) { min-width: 180px; }
+#repairTable th:nth-child(5), #repairTable td:nth-child(5) { min-width: 220px; }
