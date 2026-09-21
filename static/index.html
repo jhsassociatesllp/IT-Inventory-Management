@@ -20,8 +20,11 @@
 
     <!-- Custom Styles -->
     <link rel="stylesheet" href="/static/styles.css" />
+
+    <!-- ExcelJS — for .xlsx export with data validation -->
+    <script src="https://cdn.jsdelivr.net/npm/exceljs@4.4.0/dist/exceljs.min.js"></script>
   </head>
-  <body class="bg-gradient-to-br from-red-100 via-pink-100 to-rose-100 dark:from-slate-900 dark:via-gray-900 dark:to-slate-900">
+  <body class="bg-gradient-to-br from-slate-50 via-sky-50 to-blue-100 dark:from-slate-950 dark:via-slate-900 dark:to-blue-950">
 
     <div class="app-container">
       <!-- =========================================
@@ -30,65 +33,65 @@
       <div class="sidebar bg-white/90 backdrop-blur-lg shadow-2xl flex flex-col dark:bg-gray-800/90">
 
         <!-- Header -->
-        <div class="p-8 border-b border-red-200 dark:border-gray-600 flex justify-between items-center">
+        <div class="p-4 border-b border-blue-100 dark:border-gray-700 flex justify-between items-center">
           <div>
-            <h1 class="text-3xl font-extrabold text-red-700 tracking-tight dark:text-red-200">JHS IT Admin</h1>
-            <p class="text-red-600 text-sm mt-1 dark:text-red-400">Asset Management Panel</p>
+            <h1 class="text-lg font-extrabold text-blue-950 tracking-tight dark:text-blue-200 leading-tight">JHS IT Admin</h1>
+            <p class="text-blue-600 text-xs mt-0.5 dark:text-blue-400">Asset Management</p>
           </div>
-          <button id="theme-toggle" class="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-gray-700 transition-colors">
-            <i class="fa-solid fa-moon text-red-600 dark:text-gray-300"></i>
+          <button id="theme-toggle" class="p-1.5 rounded-lg hover:bg-blue-50 dark:hover:bg-gray-700 transition-colors">
+            <i class="fa-solid fa-moon text-blue-600 dark:text-gray-300 text-sm"></i>
           </button>
         </div>
 
         <!-- User Info -->
-        <div class="px-8 py-4 bg-red-50/50 dark:bg-gray-700/50 border-b border-red-200 dark:border-gray-600">
-          <div class="flex items-center gap-3">
-            <div class="w-10 h-10 rounded-full bg-gradient-to-br from-red-500 to-rose-600 flex items-center justify-center text-white font-bold">
+        <div class="px-4 py-3 bg-blue-50/50 dark:bg-gray-700/50 border-b border-blue-100 dark:border-gray-700">
+          <div class="flex items-center gap-2">
+            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-blue-600 to-indigo-600 flex items-center justify-center text-white font-bold text-sm flex-shrink-0">
               <span id="userInitial">U</span>
             </div>
-            <div class="flex-1">
-              <p class="text-sm font-semibold text-gray-900 dark:text-gray-100" id="displayUserName">User</p>
-              <p class="text-xs text-gray-600 dark:text-gray-400" id="displayUserRole">Loading...</p>
+            <div class="flex-1 min-w-0">
+              <p class="text-xs font-semibold text-gray-900 dark:text-gray-100 truncate" id="displayUserName">User</p>
+              <p class="text-xs text-gray-500 dark:text-gray-400 truncate" id="displayUserRole">Loading...</p>
             </div>
           </div>
         </div>
 
         <!-- Navigation -->
-        <nav class="flex-1 p-6 space-y-3">
+        <nav class="flex-1 p-3 space-y-1">
           <button data-section="home" class="sidebar-btn active">
-            <i class="fa-solid fa-house text-xl text-red-600 dark:text-red-400"></i>
-            <span class="text-lg">Home</span>
+            <i class="fa-solid fa-house text-sm text-blue-600 dark:text-sky-400 w-4"></i>
+            <span>Home</span>
           </button>
           <button data-section="laptop" class="sidebar-btn">
-            <i class="fa-solid fa-laptop text-xl text-red-600 dark:text-red-400"></i>
-            <span class="text-lg">Laptop</span>
+            <i class="fa-solid fa-laptop text-sm text-blue-600 dark:text-sky-400 w-4"></i>
+            <span>Laptop</span>
           </button>
           <button data-section="desktop" class="sidebar-btn">
-            <i class="fa-solid fa-desktop text-xl text-red-600 dark:text-red-400"></i>
-            <span class="text-lg">Desktop</span>
+            <i class="fa-solid fa-desktop text-sm text-blue-600 dark:text-sky-400 w-4"></i>
+            <span>Desktop</span>
           </button>
           <button data-section="cctv" class="sidebar-btn">
-            <i class="fa-solid fa-video text-xl text-red-600 dark:text-red-400"></i>
-            <span class="text-lg">CCTV Camera</span>
+            <i class="fa-solid fa-video text-sm text-blue-600 dark:text-sky-400 w-4"></i>
+            <span>CCTV Camera</span>
           </button>
           <button data-section="accesspoint" class="sidebar-btn">
-            <i class="fa-solid fa-wifi text-xl text-red-600 dark:text-red-400"></i>
-            <span class="text-lg">Access Point</span>
+            <i class="fa-solid fa-wifi text-sm text-blue-600 dark:text-sky-400 w-4"></i>
+            <span>Access Point</span>
           </button>
           <button data-section="server" class="sidebar-btn">
-            <i class="fa-solid fa-server text-xl text-red-600 dark:text-red-400"></i>
-            <span class="text-lg">Server</span>
+            <i class="fa-solid fa-server text-sm text-blue-600 dark:text-sky-400 w-4"></i>
+            <span>Server</span>
           </button>
           <button data-section="firewall" class="sidebar-btn">
-            <i class="fa-solid fa-shield-halved text-xl text-red-600 dark:text-red-400"></i>
-            <span class="text-lg">Firewall</span>
+            <i class="fa-solid fa-shield-halved text-sm text-blue-600 dark:text-sky-400 w-4"></i>
+            <span>Firewall</span>
           </button>
         </nav>
 
         <!-- Logout -->
-        <div class="p-6 border-t border-red-200 dark:border-gray-600">
-          <button id="logout" class="w-full flex items-center space-x-3 px-6 py-3 text-red-600 font-medium rounded-xl hover:bg-red-50 dark:hover:bg-gray-700 transition dark:text-red-400">
-            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+        <div class="p-3 border-t border-blue-100 dark:border-gray-700">
+          <button id="logout" class="w-full flex items-center gap-2 px-3 py-2 text-blue-700 text-sm font-medium rounded-xl hover:bg-blue-50 dark:hover:bg-gray-700 transition dark:text-blue-400">
+            <i class="fa-solid fa-arrow-right-from-bracket text-sm"></i>
             <span><b>Logout</b></span>
           </button>
         </div>
@@ -98,31 +101,31 @@
            MAIN CONTENT
            ========================================= -->
       <div class="main-content">
-        <div class="content-wrapper p-10">
-          <div class="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-10 min-h-screen dark:bg-gray-800/80">
+        <div class="content-wrapper p-4">
+          <div class="bg-white/80 backdrop-blur-md rounded-3xl shadow-xl p-6 min-h-screen dark:bg-gray-800/80">
 
             <!-- HOME SECTION -->
             <div id="home" class="section">
-              <div class="text-center py-16">
-                <h1 class="text-6xl font-extrabold text-red-800 mb-4 dark:text-red-100">Welcome to JHS IT Admin Panel</h1>
-                <p class="text-4xl font-bold text-red-700 mb-8 dark:text-red-200">
+              <div class="text-center py-10">
+                <h1 class="text-4xl font-extrabold text-blue-950 mb-3 dark:text-blue-100">Welcome to JHS IT Admin Panel</h1>
+                <p class="text-2xl font-bold text-blue-900 mb-6 dark:text-blue-200">
                   Hey <span id="welcomeUserName">User</span> <span class="animate-wave"></span>
                 </p>
-                <p class="text-xl text-gray-600 max-w-2xl mx-auto dark:text-gray-300">
+                <p class="text-base text-gray-600 max-w-2xl mx-auto dark:text-gray-300">
                   Manage all your IT assets with full control &amp; security.
                 </p>
-                <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8">
-                  <div class="bg-gradient-to-br from-red-500 to-rose-600 p-8 rounded-2xl text-white shadow-xl hover:scale-105 transition">
-                    <i class="fa-solid fa-laptop text-6xl opacity-80"></i>
-                    <h3 class="text-2xl font-bold mt-4">Assets</h3>
+                <div class="mt-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div class="bg-gradient-to-br from-blue-600 to-indigo-600 p-6 rounded-2xl text-white shadow-xl hover:scale-105 transition">
+                    <i class="fa-solid fa-laptop text-4xl opacity-80"></i>
+                    <h3 class="text-xl font-bold mt-3">Assets</h3>
                   </div>
-                  <div class="bg-gradient-to-br from-red-500 to-rose-600 p-8 rounded-2xl text-white shadow-xl hover:scale-105 transition">
-                    <i class="fa-solid fa-shield-halved text-6xl opacity-80"></i>
-                    <h3 class="text-2xl font-bold mt-4">Security</h3>
+                  <div class="bg-gradient-to-br from-blue-600 to-indigo-600 p-6 rounded-2xl text-white shadow-xl hover:scale-105 transition">
+                    <i class="fa-solid fa-shield-halved text-4xl opacity-80"></i>
+                    <h3 class="text-xl font-bold mt-3">Security</h3>
                   </div>
-                  <div class="bg-gradient-to-br from-red-500 to-rose-600 p-8 rounded-2xl text-white shadow-xl hover:scale-105 transition">
-                    <i class="fa-solid fa-bolt text-6xl opacity-80"></i>
-                    <h3 class="text-2xl font-bold mt-4">Performance</h3>
+                  <div class="bg-gradient-to-br from-blue-600 to-indigo-600 p-6 rounded-2xl text-white shadow-xl hover:scale-105 transition">
+                    <i class="fa-solid fa-bolt text-4xl opacity-80"></i>
+                    <h3 class="text-xl font-bold mt-3">Performance</h3>
                   </div>
                 </div>
               </div>
@@ -130,19 +133,24 @@
 
             <!-- LAPTOP SECTION -->
             <div id="laptop" class="section hidden">
-              <h2 class="text-4xl font-bold text-red-800 mb-6 dark:text-red-100">Laptop Management</h2>
+              <h2 class="text-2xl font-bold text-blue-950 mb-4 dark:text-blue-100">Laptop Management</h2>
 
               <!-- Laptop Cards -->
-              <div id="laptopCardsSection" class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
-                <div class="bg-gradient-to-br from-red-500 to-rose-600 p-8 rounded-2xl text-white shadow-xl hover:scale-105 transition cursor-pointer" onclick="showEmployeeEntry()">
-                  <i class="fa-solid fa-user-plus text-5xl opacity-80 mb-4 block"></i>
-                  <h3 class="text-2xl font-bold">Add Employee Entry</h3>
-                  <p class="text-red-100 mt-2">Manage employee laptop assignments</p>
+              <div id="laptopCardsSection" class="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
+                <div class="bg-gradient-to-br from-blue-600 to-indigo-600 p-3 rounded-xl text-white shadow-lg hover:scale-105 transition cursor-pointer" onclick="showEmployeeEntry()">
+                  <i class="fa-solid fa-user-plus text-2xl opacity-80 mb-1 block"></i>
+                  <h3 class="text-sm font-bold">Add Employee Entry</h3>
+                  <p class="text-blue-100 mt-0.5 text-xs">Manage employee laptop assignments</p>
                 </div>
-                <div class="bg-gradient-to-br from-red-500 to-rose-600 p-8 rounded-2xl text-white shadow-xl hover:scale-105 transition cursor-pointer" onclick="showLaptopInventory()">
-                  <i class="fa-solid fa-laptop-medical text-5xl opacity-80 mb-4 block"></i>
-                  <h3 class="text-2xl font-bold">Add Laptop Inventory</h3>
-                  <p class="text-red-100 mt-2">Manage laptop stock and specifications</p>
+                <div class="bg-gradient-to-br from-blue-600 to-indigo-600 p-3 rounded-xl text-white shadow-lg hover:scale-105 transition cursor-pointer" onclick="showLaptopInventory()">
+                  <i class="fa-solid fa-laptop-medical text-2xl opacity-80 mb-1 block"></i>
+                  <h3 class="text-sm font-bold">Add Laptop Inventory</h3>
+                  <p class="text-blue-100 mt-0.5 text-xs">Manage laptop stock and specifications</p>
+                </div>
+                <div class="bg-gradient-to-br from-red-600 to-rose-700 p-3 rounded-xl text-white shadow-lg hover:scale-105 transition cursor-pointer" onclick="showExitEmployee()">
+                  <i class="fa-solid fa-user-minus text-2xl opacity-80 mb-1 block"></i>
+                  <h3 class="text-sm font-bold">Exit Employee</h3>
+                  <p class="text-red-100 mt-0.5 text-xs">Process employee laptop exit &amp; return</p>
                 </div>
               </div>
 
@@ -151,74 +159,83 @@
                    ========================================== -->
               <div id="employeeEntrySection" class="hidden">
                 <div class="flex justify-between items-center mb-6">
-                  <h3 class="text-2xl font-bold text-red-700 dark:text-red-300">Employee Entry</h3>
+                  <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-300">Employee Entry</h3>
                   <button onclick="backToLaptopCards()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition flex items-center gap-2 dark:bg-gray-700 dark:hover:bg-gray-600">
                     <i class="fa-solid fa-arrow-left"></i> Back
                   </button>
                 </div>
 
                 <!-- Employee Tabs -->
-                <div class="flex space-x-2 mb-6 bg-red-50/50 dark:bg-gray-700/50 p-2 rounded-xl shadow-md">
-                  <button data-employee-tab="addNew"   class="tab-btn employee-tab-btn flex-1 py-3 px-6 rounded-lg text-red-700 font-semibold hover:bg-red-200 dark:text-red-300 dark:hover:bg-gray-600 transition">Add New Entry</button>
-                  <button data-employee-tab="update"   class="tab-btn employee-tab-btn flex-1 py-3 px-6 rounded-lg text-red-700 font-semibold hover:bg-red-200 dark:text-red-300 dark:hover:bg-gray-600 transition">Update Entry</button>
-                  <button data-employee-tab="history"  class="tab-btn employee-tab-btn flex-1 py-3 px-6 rounded-lg text-red-700 font-semibold hover:bg-red-200 dark:text-red-300 dark:hover:bg-gray-600 transition">History</button>
-                  <button data-employee-tab="analysis" class="tab-btn employee-tab-btn flex-1 py-3 px-6 rounded-lg text-red-700 font-semibold hover:bg-red-200 dark:text-red-300 dark:hover:bg-gray-600 transition">Analysis</button>
+                <div class="flex space-x-1 mb-4 bg-blue-50/60 dark:bg-gray-700/50 p-1.5 rounded-xl shadow-md">
+                  <button data-employee-tab="addNew"   class="tab-btn employee-tab-btn flex-1 py-1.5 px-3 rounded-lg text-blue-900 font-semibold text-sm hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-gray-600 transition">Add New Entry</button>
+                  <button data-employee-tab="update"   class="tab-btn employee-tab-btn flex-1 py-1.5 px-3 rounded-lg text-blue-900 font-semibold text-sm hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-gray-600 transition">Update Entry</button>
+                  <button data-employee-tab="history"  class="tab-btn employee-tab-btn flex-1 py-1.5 px-3 rounded-lg text-blue-900 font-semibold text-sm hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-gray-600 transition">History</button>
+                  <button data-employee-tab="analysis" class="tab-btn employee-tab-btn flex-1 py-1.5 px-3 rounded-lg text-blue-900 font-semibold text-sm hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-gray-600 transition">Analysis</button>
                 </div>
 
                 <!-- ---- ADD NEW ENTRY ---- -->
                 <!-- Columns: S.No | View | JHS Code | Date | Name | Contact | Model | Processor | RAM | SSD | Mouse | Other | Action -->
                 <div id="addNewEntrySection" class="employee-content">
                   <div class="table-responsive">
-                    <div class="bg-white rounded-xl shadow-md border border-red-200 dark:bg-gray-800 dark:border-gray-600">
+                    <div class="bg-white rounded-xl shadow-md border border-blue-100 dark:bg-gray-800 dark:border-gray-600">
                       <div class="overflow-x-auto">
                         <table id="addTable" class="min-w-[1800px] w-max">
-                          <thead class="bg-gradient-to-r from-red-100 to-rose-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
+                          <thead class="bg-gradient-to-r from-blue-50 to-sky-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
                             <tr>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">S.No</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">View</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">JHS Code</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Date</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Name</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Contact No</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Model</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Processor</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">RAM</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">SSD</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Mouse</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Other</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Action</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">S.No</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">View</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">JHS Code</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Date</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Name</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Contact No</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Model</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Processor</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">RAM</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">SSD</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Mouse</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Other</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Action</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr class="bg-red-50/50 dark:bg-gray-800/50">
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">1</td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
+                            <tr class="bg-blue-50/30 dark:bg-gray-800/50">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600 text-xs">1</td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
                                 <button onclick="openModalForRow(0)" class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-eye"></i></button>
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter JHS Code" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="date" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter Name" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="tel" placeholder="Enter Contact No" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="e.g. Dell Latitude 5520" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter Processor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter RAM" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter SSD" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter Mouse" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter Other" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <button onclick="removeRow(this)" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">Remove</button>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter JHS Code" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="date" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter Name" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="tel" placeholder="Enter Contact No" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="e.g. Dell Latitude 5520" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter Processor" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter RAM" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter SSD" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter Mouse" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter Other" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <button onclick="removeRow(this)" class="bg-red-600 text-white px-2 py-1 rounded-lg text-xs hover:bg-red-700 transition">Remove</button>
                               </td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
-                      <div class="p-4 bg-red-50 border-t border-red-200 dark:bg-gray-700 dark:border-gray-600 flex gap-3">
-                        <button onclick="addNewRow()" class="bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-rose-700 transition shadow-md font-semibold">
-                          <i class="fa-solid fa-plus mr-2"></i>Add New Row
+                      <div class="p-4 bg-blue-50/50 border-t border-blue-100 dark:bg-gray-700 dark:border-gray-600 flex gap-2 flex-wrap items-center">
+                        <!-- Hidden file input for employee upload -->
+                        <input type="file" id="employeeUploadInput" accept=".csv" class="hidden" onchange="handleEmployeeUpload(event)">
+                        <button onclick="addNewRow()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-md font-semibold text-sm">
+                          <i class="fa-solid fa-plus mr-1"></i>Add Row
                         </button>
-                        <button onclick="saveAllEntries()" id="saveAllBtn" class="bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-rose-700 transition shadow-md font-semibold">
-                          <i class="fa-solid fa-floppy-disk mr-2"></i>Save All Entries
+                        <button onclick="saveAllEntries()" id="saveAllBtn" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-md font-semibold text-sm">
+                          <i class="fa-solid fa-floppy-disk mr-1"></i>Save All Entries
                         </button>
+                        <button onclick="exportEmployeeTemplate()" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-4 py-2 rounded-lg hover:from-emerald-700 hover:to-teal-700 transition shadow-md font-semibold text-sm">
+                          <i class="fa-solid fa-file-excel mr-1"></i>Export Format
+                        </button>
+                        <button onclick="document.getElementById('employeeUploadInput').click()" class="bg-gradient-to-r from-violet-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-violet-700 hover:to-purple-700 transition shadow-md font-semibold text-sm">
+                          <i class="fa-solid fa-upload mr-1"></i>Upload CSV
+                        </button>
+                        <span id="employeeUploadStatus" class="text-xs text-gray-500 dark:text-gray-400"></span>
                       </div>
                     </div>
                   </div>
@@ -239,41 +256,41 @@
                         oninput="filterUpdateTable()"
                         placeholder="Type JHS Code, Name, Contact, Status… to instantly filter"
                         autocomplete="off"
-                        class="w-full pl-11 pr-4 py-3 border-2 border-red-300 dark:border-red-700 rounded-xl focus:ring-2 focus:ring-red-500 focus:border-red-500 dark:bg-gray-800 dark:text-gray-200 text-base font-medium shadow-sm"
+                        class="w-full pl-11 pr-4 py-3 border-2 border-blue-200 dark:border-blue-800 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-800 dark:text-gray-200 text-base font-medium shadow-sm"
                       >
                     </div>
-                    <button onclick="loadUpdateEntries()" title="Refresh list" class="bg-red-600 text-white px-4 py-3 rounded-xl hover:bg-red-700 transition flex items-center gap-2 font-semibold shadow-sm">
+                    <button onclick="loadUpdateEntries()" title="Refresh list" class="bg-blue-600 text-white px-4 py-3 rounded-xl hover:bg-blue-700 transition flex items-center gap-2 font-semibold shadow-sm">
                       <i class="fa-solid fa-arrows-rotate"></i> Refresh
                     </button>
                   </div>
 
                   <!-- All-Entries Table -->
-                  <div class="bg-white rounded-xl shadow-md border border-red-200 dark:bg-gray-800 dark:border-gray-600 mb-6">
-                    <div class="px-5 py-3 border-b border-red-100 dark:border-gray-700 flex items-center justify-between">
-                      <span class="text-sm font-semibold text-red-700 dark:text-red-300 flex items-center gap-2">
-                        <i class="fa-solid fa-table-list"></i>
+                  <div class="bg-white rounded-xl shadow-md border border-blue-100 dark:bg-gray-800 dark:border-gray-600 mb-6">
+                    <div class="px-5 py-3 border-b border-blue-100 dark:border-gray-700 flex items-center justify-between">
+                      <span class="text-sm font-semibold text-blue-900 dark:text-blue-300 flex items-center gap-2">
+                        <i class="fa-solid fa-table-list text-blue-600"></i>
                         All Entries — click any row to edit
                       </span>
                       <span id="updateTableCount" class="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-3 py-1 rounded-full"></span>
                     </div>
-                    <div class="overflow-x-auto" style="max-height:320px;overflow-y:auto;">
+                    <div class="overflow-x-auto" style="max-height:280px;overflow-y:auto;">
                       <table class="w-full min-w-[1400px]" id="updateListTable">
-                        <thead class="bg-gradient-to-r from-red-100 to-rose-100 dark:from-gray-700 dark:to-gray-800 sticky top-0 z-10">
+                        <thead class="bg-gradient-to-r from-blue-50 to-sky-100 dark:from-gray-700 dark:to-gray-800 sticky top-0 z-10">
                           <tr>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">JHS Code</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">Date</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">Name</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">Contact No</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">Status</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">Model</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">Processor</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">RAM</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">SSD</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">Mouse</th>
-                            <th class="p-3 text-left text-red-700 font-semibold text-sm border-b border-red-200 dark:text-red-300 dark:border-gray-600">Other</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">JHS Code</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Date</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Name</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Contact No</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Status</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Model</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Processor</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">RAM</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">SSD</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Mouse</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Other</th>
                           </tr>
                         </thead>
-                        <tbody id="updateEntriesTableBody" class="divide-y divide-red-100 dark:divide-gray-700">
+                        <tbody id="updateEntriesTableBody" class="divide-y divide-blue-100 dark:divide-gray-700">
                           <tr><td colspan="11" class="p-6 text-center text-gray-400 text-sm">
                             <i class="fa-solid fa-spinner fa-spin mr-2"></i>Loading entries…
                           </td></tr>
@@ -286,88 +303,88 @@
                   <div id="updateFormContainer" class="hidden">
                     <div class="flex items-center justify-between mb-3">
                       <div class="flex items-center gap-3">
-                        <div class="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-                          <i class="fa-solid fa-pen text-red-600 dark:text-red-400 text-sm"></i>
+                        <div class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+                          <i class="fa-solid fa-pen text-blue-600 dark:text-blue-400 text-sm"></i>
                         </div>
-                        <span class="text-base font-bold text-red-700 dark:text-red-300">
+                        <span class="text-base font-bold text-blue-900 dark:text-blue-300">
                           Editing: <span id="editingLabel" class="font-extrabold"></span>
                         </span>
                       </div>
-                      <button onclick="cancelUpdate()" class="text-xs text-gray-500 hover:text-red-600 dark:text-gray-400 dark:hover:text-red-400 flex items-center gap-1 transition">
+                      <button onclick="cancelUpdate()" class="text-xs text-gray-500 hover:text-blue-600 dark:text-gray-400 dark:hover:text-blue-400 flex items-center gap-1 transition">
                         <i class="fa-solid fa-xmark"></i> Cancel
                       </button>
                     </div>
 
-                    <div class="bg-white rounded-xl shadow-md border-2 border-red-400 dark:bg-gray-800 dark:border-red-700">
+                    <div class="bg-white rounded-xl shadow-md border-2 border-blue-400 dark:bg-gray-800 dark:border-blue-700">
                       <div class="overflow-x-auto">
                         <table id="updateTable" class="w-full min-w-[1800px]">
-                          <thead class="bg-gradient-to-r from-red-100 to-rose-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
+                          <thead class="bg-gradient-to-r from-blue-50 to-sky-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
                             <tr>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">JHS Code</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Date</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Name</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Contact No</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">JHS Code</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Date</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Name</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Contact No</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">
                                 Status
                                 <span class="ml-1 text-xs font-normal text-blue-500 dark:text-blue-400">(set here only)</span>
                               </th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Model</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Processor</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">RAM</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">SSD</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Mouse</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Other</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Model</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Processor</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">RAM</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">SSD</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Mouse</th>
+                              <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Other</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr class="bg-red-50/50 dark:bg-gray-800/50">
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
+                            <tr class="bg-blue-50/30 dark:bg-gray-800/50">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
                                 <input type="text" id="updateJhsCode" placeholder="JHS Code"
-                                  class="w-full p-3 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed text-sm font-semibold" disabled>
+                                  class="w-full p-1.5 text-xs border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 dark:text-gray-300 cursor-not-allowed font-semibold" disabled>
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="date" id="updateDate" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="date" id="updateDate" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="text" id="updateName" placeholder="Name" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="text" id="updateName" placeholder="Name" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="tel" id="updateContactNo" placeholder="Contact No" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="tel" id="updateContactNo" placeholder="Contact No" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <select id="updateStatus" class="w-full p-3 border-2 border-blue-400 dark:border-blue-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 font-semibold">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <select id="updateStatus" class="w-full p-1.5 text-xs border-2 border-blue-400 dark:border-blue-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200 font-semibold">
                                   <option value="">— Select Status —</option>
                                   <option value="IN">IN</option>
                                   <option value="Out">Out</option>
                                 </select>
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="text" id="updateModel" placeholder="e.g. Dell Latitude 5520" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="text" id="updateModel" placeholder="e.g. Dell Latitude 5520" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="text" id="updateProcessor" placeholder="Processor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="text" id="updateProcessor" placeholder="Processor" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="text" id="updateRam" placeholder="RAM" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="text" id="updateRam" placeholder="RAM" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="text" id="updateSsd" placeholder="SSD" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="text" id="updateSsd" placeholder="SSD" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="text" id="updateMouse" placeholder="Mouse" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="text" id="updateMouse" placeholder="Mouse" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <input type="text" id="updateOther" placeholder="Other" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                              <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+                                <input type="text" id="updateOther" placeholder="Other" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                               </td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
-                      <div class="p-4 bg-red-50 border-t border-red-200 dark:bg-gray-700 dark:border-gray-600 flex gap-3">
-                        <button onclick="saveUpdate()" class="bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-rose-700 transition shadow-md font-semibold">
-                          <i class="fa-solid fa-floppy-disk mr-2"></i>Save Update
+                      <div class="p-3 bg-blue-50/50 border-t border-blue-100 dark:bg-gray-700 dark:border-gray-600 flex gap-2">
+                        <button onclick="saveUpdate()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg text-sm hover:from-blue-700 hover:to-indigo-700 transition shadow-md font-semibold">
+                          <i class="fa-solid fa-floppy-disk mr-1"></i>Save Update
                         </button>
-                        <button onclick="cancelUpdate()" class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-6 py-3 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition font-semibold">
+                        <button onclick="cancelUpdate()" class="bg-gray-200 dark:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2 rounded-lg text-sm hover:bg-gray-300 dark:hover:bg-gray-500 transition font-semibold">
                           Cancel
                         </button>
                       </div>
@@ -378,42 +395,54 @@
 
                 <!-- ---- HISTORY ---- -->
                 <div id="historySection" class="employee-content hidden">
-                  <div class="mb-4 flex gap-3 items-center">
-                    <div class="relative flex-1">
-                      <i class="fa-solid fa-magnifying-glass absolute left-4 top-1/2 -translate-y-1/2 text-gray-400"></i>
-                      <input
-                        type="text"
-                        id="historySearch"
-                        oninput="filterHistory()"
-                        placeholder="Search by JHS Code, Name, Contact, Status, Date, Model, Processor…"
-                        class="w-full pl-11 pr-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-800 dark:text-gray-300"
-                      >
+                  <!-- Toolbar: search + date range + export -->
+                  <div class="mb-3 flex flex-wrap gap-2 items-center">
+                    <div class="relative flex-1 min-w-[200px]">
+                      <i class="fa-solid fa-magnifying-glass absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 text-xs"></i>
+                      <input type="text" id="historySearch" oninput="filterHistory()"
+                        placeholder="Search JHS Code, Name, Status…"
+                        class="w-full pl-9 pr-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300">
                     </div>
-                    <button onclick="loadLaptopEntries()" class="bg-red-600 text-white px-4 py-3 rounded-lg hover:bg-red-700 transition flex items-center gap-2 font-semibold">
+                    <div class="flex items-center gap-1">
+                      <label class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">From:</label>
+                      <input type="date" id="historyDateFrom" onchange="filterHistory()"
+                        class="py-2 px-2 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300">
+                    </div>
+                    <div class="flex items-center gap-1">
+                      <label class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap">To:</label>
+                      <input type="date" id="historyDateTo" onchange="filterHistory()"
+                        class="py-2 px-2 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-800 dark:text-gray-300">
+                    </div>
+                    <button onclick="loadLaptopEntries()" class="bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-1 font-semibold text-xs">
                       <i class="fa-solid fa-arrows-rotate"></i> Refresh
+                    </button>
+                    <button onclick="exportHistoryExcel()" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-3 py-2 rounded-lg hover:from-emerald-700 hover:to-teal-700 transition flex items-center gap-1 font-semibold text-xs shadow">
+                      <i class="fa-solid fa-file-excel"></i> Export Excel
                     </button>
                   </div>
 
-                  <div class="bg-white rounded-xl shadow-md border border-red-200 dark:bg-gray-800 dark:border-gray-600">
-                    <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
-                      <table class="w-full min-w-[1400px]">
-                        <thead class="bg-gradient-to-r from-red-100 to-rose-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
+                  <div class="bg-white rounded-xl shadow-md border border-blue-100 dark:bg-gray-800 dark:border-gray-600">
+                    <div class="overflow-x-auto max-h-[420px] overflow-y-auto">
+                      <table class="w-full min-w-[1800px]">
+                        <thead class="bg-gradient-to-r from-blue-50 to-sky-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
                           <tr>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">JHS Code</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Date</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Name</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Contact No</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Status</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Model</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Processor</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">RAM</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">SSD</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Mouse</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Other</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Actions</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">JHS Code</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Date</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Name</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Contact No</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Status</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Model</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Processor</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">RAM</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">SSD</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Mouse</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600 bg-yellow-50 dark:bg-yellow-900/20">Exit Date</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600 bg-yellow-50 dark:bg-yellow-900/20">Exit Done By</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600 bg-yellow-50 dark:bg-yellow-900/20">Exit Remarks</th>
+                            <th class="p-2 text-left text-blue-900 font-semibold text-xs border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Actions</th>
                           </tr>
                         </thead>
-                        <tbody id="laptopEntriesTableBody" class="divide-y divide-red-200 dark:divide-gray-600"></tbody>
+                        <tbody id="laptopEntriesTableBody" class="divide-y divide-blue-100 dark:divide-gray-600"></tbody>
                       </table>
                     </div>
                   </div>
@@ -421,21 +450,21 @@
 
                 <!-- ---- ANALYSIS ---- -->
                 <div id="analysisSection" class="employee-content hidden">
-                  <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <div class="bg-gradient-to-br from-red-500 to-rose-600 p-8 rounded-2xl text-white shadow-xl">
-                      <i class="fa-solid fa-database text-6xl opacity-80 mb-4 block"></i>
-                      <h3 class="text-2xl font-bold">Total Entries</h3>
-                      <p class="text-4xl font-bold mt-2" id="totalEntries">0</p>
+                  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                    <div class="bg-gradient-to-br from-blue-600 to-indigo-600 p-5 rounded-xl text-white shadow-xl">
+                      <i class="fa-solid fa-database text-3xl opacity-80 mb-2 block"></i>
+                      <h3 class="text-base font-bold">Total Entries</h3>
+                      <p class="text-2xl font-bold mt-1" id="totalEntries">0</p>
                     </div>
-                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-8 rounded-2xl text-white shadow-xl">
-                      <i class="fa-solid fa-circle-check text-6xl opacity-80 mb-4 block"></i>
-                      <h3 class="text-2xl font-bold">IN Status</h3>
-                      <p class="text-4xl font-bold mt-2" id="inCount">0</p>
+                    <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-5 rounded-xl text-white shadow-xl">
+                      <i class="fa-solid fa-circle-check text-3xl opacity-80 mb-2 block"></i>
+                      <h3 class="text-base font-bold">IN Status</h3>
+                      <p class="text-2xl font-bold mt-1" id="inCount">0</p>
                     </div>
-                    <div class="bg-gradient-to-br from-yellow-500 to-amber-600 p-8 rounded-2xl text-white shadow-xl">
-                      <i class="fa-solid fa-circle-xmark text-6xl opacity-80 mb-4 block"></i>
-                      <h3 class="text-2xl font-bold">Out Status</h3>
-                      <p class="text-4xl font-bold mt-2" id="outCount">0</p>
+                    <div class="bg-gradient-to-br from-yellow-500 to-amber-600 p-5 rounded-xl text-white shadow-xl">
+                      <i class="fa-solid fa-circle-xmark text-3xl opacity-80 mb-2 block"></i>
+                      <h3 class="text-base font-bold">Out Status</h3>
+                      <p class="text-2xl font-bold mt-1" id="outCount">0</p>
                     </div>
                   </div>
                 </div>
@@ -443,85 +472,185 @@
               </div><!-- end #employeeEntrySection -->
 
               <!-- ==========================================
+                   EXIT EMPLOYEE SECTION
+                   ========================================== -->
+              <div id="exitEmployeeSection" class="hidden">
+                <div class="flex justify-between items-center mb-6">
+                  <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-200">Exit Employee Process</h3>
+                  <button onclick="backToLaptopCards()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition flex items-center gap-2 dark:bg-gray-700 dark:hover:bg-gray-600">
+                    <i class="fa-solid fa-arrow-left"></i> Back
+                  </button>
+                </div>
+
+                <!-- JHS Code suggestions datalist -->
+                <datalist id="exitJhsCodeList"></datalist>
+
+                <div class="max-w-xl mx-auto">
+                  <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl border border-blue-200 dark:border-blue-900/40 overflow-hidden">
+                    <!-- Header Banner -->
+                    <div class="bg-gradient-to-r from-blue-600 to-indigo-600 px-7 py-5">
+                      <div class="flex items-center gap-3">
+                        <div class="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center">
+                          <i class="fa-solid fa-user-minus text-white text-xl"></i>
+                        </div>
+                        <div>
+                          <h4 class="text-white font-bold text-lg">Exit Employee Process</h4>
+                          <p class="text-blue-100 text-sm">Fill the details below to confirm employee exit</p>
+                        </div>
+                      </div>
+                    </div>
+
+                    <!-- Form Body -->
+                    <div class="px-7 py-6 space-y-5">
+
+                      <!-- JHS Code with autocomplete -->
+                      <div class="relative">
+                        <label for="exitJhsCode" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                          JHS Code <span class="text-blue-500">*</span>
+                        </label>
+                        <input type="text" id="exitJhsCode" list="exitJhsCodeList"
+                          placeholder="Type to search JHS Code…" autocomplete="off"
+                          oninput="populateExitSuggestions()"
+                          class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 dark:bg-gray-700 dark:text-gray-200 text-sm font-medium transition">
+                        <!-- live suggestion dropdown -->
+                        <ul id="exitJhsDropdown" class="absolute z-50 left-0 right-0 mt-1 bg-white dark:bg-gray-700 border border-blue-200 dark:border-gray-600 rounded-xl shadow-lg max-h-48 overflow-y-auto hidden"></ul>
+                      </div>
+
+                      <!-- Exit Date -->
+                      <div>
+                        <label for="exitDate" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                          Exit Date <span class="text-blue-500">*</span>
+                        </label>
+                        <input type="date" id="exitDate"
+                          class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 dark:bg-gray-700 dark:text-gray-200 text-sm font-medium transition">
+                      </div>
+
+                      <!-- Who Done Exit Process — dropdown -->
+                      <div>
+                        <label for="exitDoneBy" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                          Who Done Exit Process <span class="text-blue-500">*</span>
+                        </label>
+                        <select id="exitDoneBy"
+                          class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 dark:bg-gray-700 dark:text-gray-200 text-sm font-medium transition">
+                          <option value="">— Select Person —</option>
+                          <option value="Mohd Siddiqui">Mohd Siddiqui</option>
+                          <option value="Pankaj Gupta">Pankaj Gupta</option>
+                          <option value="Gauhar Akhtar">Gauhar Akhtar</option>
+                        </select>
+                      </div>
+
+                      <!-- Remarks (optional) -->
+                      <div>
+                        <label for="exitRemarks" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-1">
+                          Remarks <span class="text-gray-400 font-normal text-xs">(optional)</span>
+                        </label>
+                        <textarea id="exitRemarks" rows="3" placeholder="Any additional remarks about the exit process…"
+                          class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-blue-400 dark:bg-gray-700 dark:text-gray-200 text-sm font-medium transition resize-none"></textarea>
+                      </div>
+
+                    </div>
+
+                    <!-- Footer -->
+                    <div class="px-7 pb-7">
+                      <button onclick="confirmEmployeeExit()" id="confirmExitBtn"
+                        class="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white py-3.5 px-6 rounded-xl font-bold text-base hover:from-blue-700 hover:to-indigo-700 transition shadow-lg flex items-center justify-center gap-2">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        Confirm Exit
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div><!-- end #exitEmployeeSection -->
+
+              <!-- ==========================================
                    LAPTOP INVENTORY SECTION
                    ========================================== -->
               <div id="laptopInventorySection" class="hidden">
                 <div class="flex justify-between items-center mb-6">
-                  <h3 class="text-2xl font-bold text-red-700 dark:text-red-300">Laptop Inventory</h3>
+                  <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-300">Laptop Inventory</h3>
                   <button onclick="backToLaptopCards()" class="bg-gray-500 text-white px-4 py-2 rounded-lg hover:bg-gray-600 transition flex items-center gap-2 dark:bg-gray-700 dark:hover:bg-gray-600">
                     <i class="fa-solid fa-arrow-left"></i> Back
                   </button>
                 </div>
 
                 <!-- Inventory Tabs -->
-                <div class="flex space-x-2 mb-6 bg-red-50/50 dark:bg-gray-700/50 p-2 rounded-xl shadow-md">
-                  <button data-inventory-tab="addInventory"     class="tab-btn inventory-tab-btn flex-1 py-3 px-6 rounded-lg text-red-700 font-semibold hover:bg-red-200 dark:text-red-300 dark:hover:bg-gray-600 transition">Add Laptop Entry</button>
-                  <button data-inventory-tab="inventoryHistory" class="tab-btn inventory-tab-btn flex-1 py-3 px-6 rounded-lg text-red-700 font-semibold hover:bg-red-200 dark:text-red-300 dark:hover:bg-gray-600 transition">History</button>
-                  <button data-inventory-tab="repairing"        class="tab-btn inventory-tab-btn flex-1 py-3 px-6 rounded-lg text-red-700 font-semibold hover:bg-red-200 dark:text-red-300 dark:hover:bg-gray-600 transition">Repairing Laptop</button>
+                <div class="flex space-x-2 mb-6 bg-blue-50/60 dark:bg-gray-700/50 p-2 rounded-xl shadow-md">
+                  <button data-inventory-tab="addInventory"     class="tab-btn inventory-tab-btn flex-1 py-3 px-6 rounded-lg text-blue-900 font-semibold hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-gray-600 transition">Add Laptop Entry</button>
+                  <button data-inventory-tab="inventoryHistory" class="tab-btn inventory-tab-btn flex-1 py-3 px-6 rounded-lg text-blue-900 font-semibold hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-gray-600 transition">History</button>
+                  <button data-inventory-tab="repairing"        class="tab-btn inventory-tab-btn flex-1 py-3 px-6 rounded-lg text-blue-900 font-semibold hover:bg-blue-100 dark:text-blue-300 dark:hover:bg-gray-600 transition">Repairing Laptop</button>
                 </div>
 
                 <!-- ADD INVENTORY -->
                 <div id="addInventorySection" class="inventory-content">
-                  <div class="bg-white rounded-xl shadow-md border border-red-200 dark:bg-gray-800 dark:border-gray-600">
+                  <div class="bg-white rounded-xl shadow-md border border-blue-100 dark:bg-gray-800 dark:border-gray-600">
                     <div class="overflow-x-auto">
                       <table id="inventoryAddTable" class="w-full min-w-[1000px]">
-                        <thead class="bg-gradient-to-r from-red-100 to-rose-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
+                        <thead class="bg-gradient-to-r from-blue-50 to-sky-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
                           <tr>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">S.No</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">View</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">JHS Tag</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Brand</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Processor</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">RAM</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">SSD</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Action</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">S.No</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">View</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">JHS Tag</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Brand</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Processor</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">RAM</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">SSD</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Action</th>
                           </tr>
                         </thead>
                         <tbody>
-                          <tr class="bg-red-50/50 dark:bg-gray-800/50">
-                            <td class="p-4 border-t border-red-200 dark:border-gray-600">1</td>
-                            <td class="p-4 border-t border-red-200 dark:border-gray-600">
+                          <tr class="bg-blue-50/30 dark:bg-gray-800/50">
+                            <td class="p-4 border-t border-blue-100 dark:border-gray-600">1</td>
+                            <td class="p-4 border-t border-blue-100 dark:border-gray-600">
                               <button onclick="openInventoryModalForRow(0)" class="text-blue-600 hover:text-blue-800"><i class="fa-solid fa-eye"></i></button>
                             </td>
-                            <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter JHS Tag" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                            <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter Brand" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                            <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter Processor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                            <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter RAM" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                            <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" placeholder="Enter SSD" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
-                            <td class="p-4 border-t border-red-200 dark:border-gray-600">
+                            <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter JHS Tag" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                            <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter Brand" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                            <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter Processor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                            <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter RAM" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                            <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter SSD" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+                            <td class="p-4 border-t border-blue-100 dark:border-gray-600">
                               <button onclick="removeInventoryRow(this)" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">Remove</button>
                             </td>
                           </tr>
                         </tbody>
                       </table>
                     </div>
-                    <div class="p-4 bg-red-50 border-t border-red-200 dark:bg-gray-700 dark:border-gray-600 flex gap-3">
-                      <button onclick="addInventoryRow()" class="bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-rose-700 transition shadow-md font-semibold">
-                        <i class="fa-solid fa-plus mr-2"></i>Add New Row
+                    <div class="p-4 bg-blue-50/50 border-t border-blue-100 dark:bg-gray-700 dark:border-gray-600 flex gap-2 flex-wrap items-center">
+                      <!-- Hidden file input for inventory upload -->
+                      <input type="file" id="inventoryUploadInput" accept=".csv" class="hidden" onchange="handleInventoryUpload(event)">
+                      <button onclick="addInventoryRow()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-md font-semibold text-sm">
+                        <i class="fa-solid fa-plus mr-1"></i>Add Row
                       </button>
-                      <button onclick="saveAllInventoryEntries()" id="saveAllInventoryBtn" class="bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-rose-700 transition shadow-md font-semibold">
-                        <i class="fa-solid fa-floppy-disk mr-2"></i>Save All Entries
+                      <button onclick="saveAllInventoryEntries()" id="saveAllInventoryBtn" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-4 py-2 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-md font-semibold text-sm">
+                        <i class="fa-solid fa-floppy-disk mr-1"></i>Save All Entries
                       </button>
+                      <button onclick="exportInventoryTemplate()" class="bg-gradient-to-r from-emerald-600 to-teal-600 text-white px-4 py-2 rounded-lg hover:from-emerald-700 hover:to-teal-700 transition shadow-md font-semibold text-sm">
+                        <i class="fa-solid fa-file-excel mr-1"></i>Export Format
+                      </button>
+                      <button onclick="document.getElementById('inventoryUploadInput').click()" class="bg-gradient-to-r from-violet-600 to-purple-600 text-white px-4 py-2 rounded-lg hover:from-violet-700 hover:to-purple-700 transition shadow-md font-semibold text-sm">
+                        <i class="fa-solid fa-upload mr-1"></i>Upload CSV
+                      </button>
+                      <span id="inventoryUploadStatus" class="text-xs text-gray-500 dark:text-gray-400"></span>
                     </div>
                   </div>
                 </div>
 
                 <!-- INVENTORY HISTORY -->
                 <div id="inventoryHistorySection" class="inventory-content hidden">
-                  <div class="bg-white rounded-xl shadow-md overflow-hidden border border-red-200 dark:bg-gray-800 dark:border-gray-600">
+                  <div class="bg-white rounded-xl shadow-md overflow-hidden border border-blue-100 dark:bg-gray-800 dark:border-gray-600">
                     <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
                       <table class="w-full min-w-[800px]">
-                        <thead class="bg-gradient-to-r from-red-100 to-rose-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
+                        <thead class="bg-gradient-to-r from-blue-50 to-sky-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
                           <tr>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">JHS Tag</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Brand</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Processor</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">RAM</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">SSD</th>
-                            <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Actions</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">JHS Tag</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Brand</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Processor</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">RAM</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">SSD</th>
+                            <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Actions</th>
                           </tr>
                         </thead>
-                        <tbody id="inventoryEntriesTableBody" class="divide-y divide-red-200 dark:divide-gray-600"></tbody>
+                        <tbody id="inventoryEntriesTableBody" class="divide-y divide-blue-100 dark:divide-gray-600"></tbody>
                       </table>
                     </div>
                   </div>
@@ -530,44 +659,44 @@
                 <!-- REPAIRING -->
                 <div id="repairingSection" class="inventory-content hidden">
                   <div class="mb-6 flex gap-4">
-                    <input type="text" id="repairJhsTag" placeholder="Enter JHS Tag / JHS Code to search" class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-800 dark:text-gray-300">
+                    <input type="text" id="repairJhsTag" placeholder="Enter JHS Tag / JHS Code to search" class="flex-1 p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-800 dark:text-gray-300">
                     <button onclick="searchForRepair()" class="bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition shadow-md font-semibold flex items-center gap-2">
                       <i class="fa-solid fa-magnifying-glass"></i> Search
                     </button>
                   </div>
                   <div id="repairFormContainer" class="hidden">
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-red-200 dark:bg-gray-800 dark:border-gray-600">
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-blue-100 dark:bg-gray-800 dark:border-gray-600">
                       <div class="overflow-x-auto">
                         <table id="repairTable" class="w-full min-w-[1000px]">
-                          <thead class="bg-gradient-to-r from-red-100 to-rose-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
+                          <thead class="bg-gradient-to-r from-blue-50 to-sky-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
                             <tr>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">JHS Tag</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Issue</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Repair Date</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Status</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Notes</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">JHS Tag</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Issue</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Repair Date</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Status</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Notes</th>
                             </tr>
                           </thead>
                           <tbody>
-                            <tr class="bg-red-50/50 dark:bg-gray-800/50">
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" id="repairJhsCode" placeholder="JHS Tag" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 dark:text-gray-200 cursor-not-allowed" disabled></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" id="repairIssue" placeholder="Enter Issue" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="date" id="repairDate" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200"></td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600">
-                                <select id="repairStatus" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+                            <tr class="bg-blue-50/30 dark:bg-gray-800/50">
+                              <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" id="repairJhsCode" placeholder="JHS Tag" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-100 dark:bg-gray-700 dark:text-gray-200 cursor-not-allowed" disabled></td>
+                              <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" id="repairIssue" placeholder="Enter Issue" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="date" id="repairDate" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+                                <select id="repairStatus" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
                                   <option value="">Select Status</option>
                                   <option value="In Repair">In Repair</option>
                                   <option value="Repaired">Repaired</option>
                                   <option value="Irreparable">Irreparable</option>
                                 </select>
                               </td>
-                              <td class="p-4 border-t border-red-200 dark:border-gray-600"><input type="text" id="repairNotes" placeholder="Enter Notes" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200"></td>
+                              <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" id="repairNotes" placeholder="Enter Notes" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
                             </tr>
                           </tbody>
                         </table>
                       </div>
-                      <div class="p-4 bg-red-50 border-t border-red-200 dark:bg-gray-700 dark:border-gray-600">
-                        <button onclick="saveRepair()" class="bg-gradient-to-r from-red-600 to-rose-600 text-white px-6 py-3 rounded-lg hover:from-red-700 hover:to-rose-700 transition shadow-md font-semibold">
+                      <div class="p-4 bg-blue-50/50 border-t border-blue-100 dark:bg-gray-700 dark:border-gray-600">
+                        <button onclick="saveRepair()" class="bg-gradient-to-r from-blue-600 to-indigo-600 text-white px-6 py-3 rounded-lg hover:from-blue-700 hover:to-indigo-700 transition shadow-md font-semibold">
                           <i class="fa-solid fa-floppy-disk mr-2"></i>Save Repair Entry
                         </button>
                       </div>
@@ -576,22 +705,22 @@
 
                   <!-- Repair History -->
                   <div class="mt-8">
-                    <h4 class="text-xl font-bold text-red-700 dark:text-red-300 mb-4">Repair History</h4>
-                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-red-200 dark:bg-gray-800 dark:border-gray-600">
+                    <h4 class="text-xl font-bold text-blue-900 dark:text-blue-300 mb-4">Repair History</h4>
+                    <div class="bg-white rounded-xl shadow-md overflow-hidden border border-blue-100 dark:bg-gray-800 dark:border-gray-600">
                       <div class="overflow-x-auto max-h-[500px] overflow-y-auto">
                         <table class="w-full min-w-[1100px]">
-                          <thead class="bg-gradient-to-r from-red-100 to-rose-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
+                          <thead class="bg-gradient-to-r from-blue-50 to-sky-100 sticky top-0 dark:from-gray-700 dark:to-gray-800">
                             <tr>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">JHS Tag</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Employee</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Issue</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Repair Date</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Status</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Notes</th>
-                              <th class="p-4 text-left text-red-700 font-semibold border-b border-red-200 dark:text-red-300 dark:border-gray-600">Actions</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">JHS Tag</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Employee</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Issue</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Repair Date</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Status</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Notes</th>
+                              <th class="p-4 text-left text-blue-900 font-semibold border-b border-blue-100 dark:text-blue-300 dark:border-gray-600">Actions</th>
                             </tr>
                           </thead>
-                          <tbody id="repairEntriesTableBody" class="divide-y divide-red-200 dark:divide-gray-600"></tbody>
+                          <tbody id="repairEntriesTableBody" class="divide-y divide-blue-100 dark:divide-gray-600"></tbody>
                         </table>
                       </div>
                     </div>
@@ -604,40 +733,40 @@
 
             <!-- DESKTOP SECTION -->
             <div id="desktop" class="section hidden">
-              <h2 class="text-4xl font-bold text-red-800 mb-6 dark:text-red-100">Desktop Management</h2>
-              <div class="bg-gradient-to-r from-red-500 to-rose-600 p-20 rounded-2xl text-white text-center">
+              <h2 class="text-4xl font-bold text-blue-950 mb-6 dark:text-blue-100">Desktop Management</h2>
+              <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-20 rounded-2xl text-white text-center">
                 <i class="fa-solid fa-desktop text-9xl opacity-30"></i>
               </div>
             </div>
 
             <!-- CCTV SECTION -->
             <div id="cctv" class="section hidden">
-              <h2 class="text-4xl font-bold text-red-800 mb-6 dark:text-red-100">CCTV Camera Management</h2>
-              <div class="bg-gradient-to-r from-red-500 to-rose-600 p-20 rounded-2xl text-white text-center">
+              <h2 class="text-4xl font-bold text-blue-950 mb-6 dark:text-blue-100">CCTV Camera Management</h2>
+              <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-20 rounded-2xl text-white text-center">
                 <i class="fa-solid fa-video text-9xl opacity-30"></i>
               </div>
             </div>
 
             <!-- ACCESS POINT SECTION -->
             <div id="accesspoint" class="section hidden">
-              <h2 class="text-4xl font-bold text-red-800 mb-6 dark:text-red-100">Access Point Management</h2>
-              <div class="bg-gradient-to-r from-red-500 to-rose-600 p-20 rounded-2xl text-white text-center">
+              <h2 class="text-4xl font-bold text-blue-950 mb-6 dark:text-blue-100">Access Point Management</h2>
+              <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-20 rounded-2xl text-white text-center">
                 <i class="fa-solid fa-wifi text-9xl opacity-30"></i>
               </div>
             </div>
 
             <!-- SERVER SECTION -->
             <div id="server" class="section hidden">
-              <h2 class="text-4xl font-bold text-red-800 mb-6 dark:text-red-100">Server Management</h2>
-              <div class="bg-gradient-to-r from-red-500 to-rose-600 p-20 rounded-2xl text-white text-center">
+              <h2 class="text-4xl font-bold text-blue-950 mb-6 dark:text-blue-100">Server Management</h2>
+              <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-20 rounded-2xl text-white text-center">
                 <i class="fa-solid fa-server text-9xl opacity-30"></i>
               </div>
             </div>
 
             <!-- FIREWALL SECTION -->
             <div id="firewall" class="section hidden">
-              <h2 class="text-4xl font-bold text-red-800 mb-6 dark:text-red-100">Firewall Configuration</h2>
-              <div class="bg-gradient-to-r from-red-500 to-rose-600 p-20 rounded-2xl text-white text-center">
+              <h2 class="text-4xl font-bold text-blue-950 mb-6 dark:text-blue-100">Firewall Configuration</h2>
+              <div class="bg-gradient-to-r from-blue-600 to-indigo-600 p-20 rounded-2xl text-white text-center">
                 <i class="fa-solid fa-shield-halved text-9xl opacity-30"></i>
               </div>
             </div>
@@ -653,20 +782,20 @@
                  Model | Processor | RAM | SSD | Mouse | Other
          ========================================== -->
     <div id="previewModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4 max-h-[92vh] overflow-y-auto dark:bg-gray-800 border border-red-100 dark:border-gray-600">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-2xl mx-4 max-h-[92vh] overflow-y-auto dark:bg-gray-800 border border-blue-100 dark:border-gray-600">
 
         <!-- Header -->
-        <div class="flex items-center justify-between px-7 pt-6 pb-4 border-b border-red-100 dark:border-gray-700">
+        <div class="flex items-center justify-between px-7 pt-6 pb-4 border-b border-blue-100 dark:border-gray-700">
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-              <i class="fa-solid fa-pen-to-square text-red-600 dark:text-red-400"></i>
+            <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+              <i class="fa-solid fa-pen-to-square text-blue-600 dark:text-blue-400"></i>
             </div>
             <div>
               <h3 class="text-lg font-bold text-gray-900 dark:text-white">Edit Entry</h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Row <span id="modalSNo" class="font-semibold text-red-600 dark:text-red-400">1</span></p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Row <span id="modalSNo" class="font-semibold text-blue-600 dark:text-blue-400">1</span></p>
             </div>
           </div>
-          <button onclick="closeModal()" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-gray-700 text-gray-400 hover:text-red-600 transition">
+          <button onclick="closeModal()" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-blue-50 dark:hover:bg-gray-700 text-gray-400 hover:text-blue-600 transition">
             <i class="fa-solid fa-xmark text-lg"></i>
           </button>
         </div>
@@ -678,70 +807,70 @@
           <div class="sm:col-span-2">
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">JHS Code</label>
             <input type="text" id="modalJhsCode" placeholder="Enter JHS Code"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm font-medium">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm font-medium">
           </div>
 
           <!-- Date -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Date</label>
             <input type="date" id="modalDate"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- Name -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Employee Name</label>
             <input type="text" id="modalName" placeholder="Enter full name"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- Contact No -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Contact No</label>
             <input type="tel" id="modalContactNo" placeholder="Enter contact number"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- Model — NEW FIELD -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Laptop Model</label>
             <input type="text" id="modalModel" placeholder="e.g. Dell Latitude 5520"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- Processor -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Processor</label>
             <input type="text" id="modalProcessor" placeholder="e.g. Intel i5-12th Gen"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- RAM -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">RAM</label>
             <input type="text" id="modalRam" placeholder="e.g. 8GB DDR4"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- SSD -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">SSD</label>
             <input type="text" id="modalSsd" placeholder="e.g. 512GB NVMe"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- Mouse -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Mouse</label>
             <input type="text" id="modalMouse" placeholder="e.g. Logitech M185"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- Other -->
           <div class="sm:col-span-2">
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Other / Accessories</label>
             <input type="text" id="modalOther" placeholder="Any other accessories or notes"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
         </div>
@@ -751,7 +880,7 @@
           <button onclick="closeModal()" class="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm">
             Cancel
           </button>
-          <button onclick="saveModalEntry()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold hover:from-red-700 hover:to-rose-700 transition shadow text-sm">
+          <button onclick="saveModalEntry()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition shadow text-sm">
             <i class="fa-solid fa-floppy-disk mr-1.5"></i>Save Row
           </button>
         </div>
@@ -763,20 +892,20 @@
          MODAL: Inventory Entry — Edit
          ========================================== -->
     <div id="inventoryPreviewModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 hidden">
-      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 max-h-[92vh] overflow-y-auto dark:bg-gray-800 border border-red-100 dark:border-gray-600">
+      <div class="bg-white rounded-2xl shadow-2xl w-full max-w-lg mx-4 max-h-[92vh] overflow-y-auto dark:bg-gray-800 border border-blue-100 dark:border-gray-600">
 
         <!-- Header -->
-        <div class="flex items-center justify-between px-7 pt-6 pb-4 border-b border-red-100 dark:border-gray-700">
+        <div class="flex items-center justify-between px-7 pt-6 pb-4 border-b border-blue-100 dark:border-gray-700">
           <div class="flex items-center gap-3">
-            <div class="w-9 h-9 rounded-xl bg-red-100 dark:bg-red-900/30 flex items-center justify-center">
-              <i class="fa-solid fa-laptop text-red-600 dark:text-red-400"></i>
+            <div class="w-9 h-9 rounded-xl bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
+              <i class="fa-solid fa-laptop text-blue-600 dark:text-blue-400"></i>
             </div>
             <div>
               <h3 class="text-lg font-bold text-gray-900 dark:text-white">Edit Inventory Entry</h3>
-              <p class="text-xs text-gray-500 dark:text-gray-400">Row <span id="inventoryModalSNo" class="font-semibold text-red-600 dark:text-red-400">1</span></p>
+              <p class="text-xs text-gray-500 dark:text-gray-400">Row <span id="inventoryModalSNo" class="font-semibold text-blue-600 dark:text-blue-400">1</span></p>
             </div>
           </div>
-          <button onclick="closeInventoryModal()" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-red-50 dark:hover:bg-gray-700 text-gray-400 hover:text-red-600 transition">
+          <button onclick="closeInventoryModal()" class="w-9 h-9 flex items-center justify-center rounded-full hover:bg-blue-50 dark:hover:bg-gray-700 text-gray-400 hover:text-blue-600 transition">
             <i class="fa-solid fa-xmark text-lg"></i>
           </button>
         </div>
@@ -788,35 +917,35 @@
           <div class="sm:col-span-2">
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">JHS Tag</label>
             <input type="text" id="inventoryModalJhsTag" placeholder="Enter JHS Tag"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm font-medium">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm font-medium">
           </div>
 
           <!-- Brand -->
           <div class="sm:col-span-2">
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Brand</label>
             <input type="text" id="inventoryModalBrand" placeholder="e.g. Dell, HP, Lenovo"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- Processor -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Processor</label>
             <input type="text" id="inventoryModalProcessor" placeholder="e.g. Intel i5-12th Gen"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- RAM -->
           <div>
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">RAM</label>
             <input type="text" id="inventoryModalRam" placeholder="e.g. 8GB DDR4"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
           <!-- SSD -->
           <div class="sm:col-span-2">
             <label class="block text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">SSD</label>
             <input type="text" id="inventoryModalSsd" placeholder="e.g. 512GB NVMe SSD"
-              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-red-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
+              class="w-full px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-blue-400 focus:border-transparent dark:bg-gray-700 dark:text-gray-200 text-sm">
           </div>
 
         </div>
@@ -826,7 +955,7 @@
           <button onclick="closeInventoryModal()" class="px-5 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-600 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition text-sm">
             Cancel
           </button>
-          <button onclick="saveInventoryModalEntry()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-red-600 to-rose-600 text-white font-semibold hover:from-red-700 hover:to-rose-700 transition shadow text-sm">
+          <button onclick="saveInventoryModalEntry()" class="px-6 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold hover:from-blue-700 hover:to-indigo-700 transition shadow text-sm">
             <i class="fa-solid fa-floppy-disk mr-1.5"></i>Save Row
           </button>
         </div>

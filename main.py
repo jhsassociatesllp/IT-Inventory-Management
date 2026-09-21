@@ -22,11 +22,12 @@ from bson.errors import InvalidId
 from pymongo import MongoClient
 from pymongo.errors import DuplicateKeyError
 import os
+from dotenv import load_dotenv
 
 # ============================================================================
 # APP INITIALIZATION
 # ============================================================================
-
+load_dotenv()
 app = FastAPI(
     title="JHS IT Admin API",
     description="Backend API for JHS IT Admin Panel — MongoDB Edition",
@@ -62,6 +63,8 @@ def verify_password(plain: str, hashed: str) -> bool:
 MONGO_URI = os.getenv("MONGO_URI")
 DB_NAME   = os.getenv("MONGO_DB")
 
+print("MONGO_URI:", MONGO_URI)
+print("DB_NAME:", DB_NAME)
 
 client = MongoClient(MONGO_URI)
 db     = client[DB_NAME]
@@ -110,11 +113,13 @@ class LoginRequest(BaseModel):
     password: str
 
 class LaptopEntryCreate(BaseModel):
+    model_config = {"extra": "ignore"}
     jhs_code:   str
     date:       Optional[str] = ""
     name:       Optional[str] = ""
     contact_no: Optional[str] = ""
     status:     Optional[str] = "IN"
+    model:      Optional[str] = ""
     processor:  Optional[str] = ""
     ram:        Optional[str] = ""
     ssd:        Optional[str] = ""
@@ -122,10 +127,12 @@ class LaptopEntryCreate(BaseModel):
     other:      Optional[str] = ""
 
 class LaptopEntryUpdate(BaseModel):
+    model_config = {"extra": "ignore"}
     date:       Optional[str] = ""
     name:       Optional[str] = ""
     contact_no: Optional[str] = ""
     status:     Optional[str] = "IN"
+    model:      Optional[str] = ""
     processor:  Optional[str] = ""
     ram:        Optional[str] = ""
     ssd:        Optional[str] = ""
@@ -134,6 +141,11 @@ class LaptopEntryUpdate(BaseModel):
 
 class StatusUpdate(BaseModel):
     status: str
+
+class ExitRequest(BaseModel):
+    exit_date: str
+    done_by:   str
+    remarks:   Optional[str] = ""
 
 class InventoryCreate(BaseModel):
     jhs_tag:   str
@@ -294,6 +306,44 @@ def delete_laptop_entry(jhs_code: str):
     if result.deleted_count == 0:
         raise HTTPException(status_code=404, detail="Entry not found.")
     return {"message": f"Entry {jhs_code} deleted."}
+
+
+@app.post("/laptop-entries/{jhs_code}/exit")
+def exit_laptop_entry(jhs_code: str, body: ExitRequest):
+    existing = entries_col.find_one({"jhs_code": jhs_code})
+    if not existing:
+        raise HTTPException(status_code=404, detail=f"JHS Code '{jhs_code}' not found.")
+
+    if existing.get("status") == "Out":
+        raise HTTPException(status_code=409, detail=f"JHS Code '{jhs_code}' is already exited (status Out).")
+
+    now = datetime.now().isoformat()
+    notes_parts = [
+        f"Exit processed by: {body.done_by}",
+        f"Exit date: {body.exit_date}",
+    ]
+    if body.remarks:
+        notes_parts.append(f"Remarks: {body.remarks}")
+    exit_notes = " | ".join(notes_parts)
+
+    entries_col.update_one(
+        {"jhs_code": jhs_code},
+        {"$set": {"status": "Out", "other": exit_notes, "updated_at": now}}
+    )
+
+    _auto_create_repair(
+        jhs_code,
+        existing.get("name", ""),
+        existing.get("contact_no", ""),
+        body.exit_date,
+        existing.get("processor", ""),
+        existing.get("ram", ""),
+        existing.get("ssd", "")
+    )
+
+    updated = entries_col.find_one({"jhs_code": jhs_code})
+    return fix_id(updated)
+
 
 # ============================================================================
 # LAPTOP INVENTORY ROUTES

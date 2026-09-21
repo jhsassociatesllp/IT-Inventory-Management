@@ -3400,6 +3400,337 @@
 const API = ""
 
 // =====================================================
+// Export Employee Entry Template → Excel (.xlsx)
+// Uses ExcelJS for proper .xlsx with fixed column widths,
+// bold headers, and text-formatted cells to prevent
+// Excel from auto-converting dates or contact numbers.
+// =====================================================
+async function exportEmployeeTemplate() {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'JHS IT Admin';
+  workbook.created = new Date();
+
+  const sheet = workbook.addWorksheet('Employee Entry');
+
+  // Column definitions with fixed widths
+  sheet.columns = [
+    { header: 'JHS Code',   key: 'jhs_code',   width: 18 },
+    { header: 'Date',       key: 'date',        width: 14 },
+    { header: 'Name',       key: 'name',        width: 22 },
+    { header: 'Contact No', key: 'contact_no',  width: 18 },
+    { header: 'Model',      key: 'model',       width: 26 },
+    { header: 'Processor',  key: 'processor',   width: 24 },
+    { header: 'RAM',        key: 'ram',         width: 12 },
+    { header: 'SSD',        key: 'ssd',         width: 12 },
+    { header: 'Mouse',      key: 'mouse',       width: 16 },
+    { header: 'Other',      key: 'other',       width: 20 },
+  ];
+
+  // Style header row
+  const headerRow = sheet.getRow(1);
+  headerRow.eachCell(cell => {
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2563EB' } };
+    cell.alignment = { vertical: 'middle', horizontal: 'center', wrapText: false };
+    cell.border = {
+      top:    { style: 'thin', color: { argb: 'FF1E40AF' } },
+      left:   { style: 'thin', color: { argb: 'FF1E40AF' } },
+      bottom: { style: 'thin', color: { argb: 'FF1E40AF' } },
+      right:  { style: 'thin', color: { argb: 'FF1E40AF' } }
+    };
+  });
+  headerRow.height = 22;
+
+  // Add one blank sample row with text format to prevent auto-conversion
+  const sampleRow = sheet.addRow(['', '', '', '', '', '', '', '', '', '']);
+  sampleRow.eachCell({ includeEmpty: true }, cell => {
+    cell.numFmt = '@'; // force text format
+  });
+
+  // Force text format on all data columns to prevent Excel auto-convert
+  ['A','B','C','D','E','F','G','H','I','J'].forEach(col => {
+    sheet.getColumn(col).numFmt = '@';
+  });
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'JHS_Employee_Entry_Template.xlsx';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Employee template (.xlsx) downloaded! Open in Excel to fill data.', 'success');
+}
+
+// =====================================================
+// Export Inventory Template → Excel (.xlsx)
+// =====================================================
+async function exportInventoryTemplate() {
+  const workbook = new ExcelJS.Workbook();
+  workbook.creator = 'JHS IT Admin';
+  workbook.created = new Date();
+
+  const sheet = workbook.addWorksheet('Laptop Inventory');
+
+  sheet.columns = [
+    { header: 'JHS Tag',   key: 'jhs_tag',   width: 18 },
+    { header: 'Brand',     key: 'brand',      width: 18 },
+    { header: 'Processor', key: 'processor',  width: 24 },
+    { header: 'RAM',       key: 'ram',        width: 12 },
+    { header: 'SSD',       key: 'ssd',        width: 12 },
+  ];
+
+  const headerRow = sheet.getRow(1);
+  headerRow.eachCell(cell => {
+    cell.font = { bold: true, color: { argb: 'FFFFFFFF' }, size: 11 };
+    cell.fill = { type: 'pattern', pattern: 'solid', fgColor: { argb: 'FF2563EB' } };
+    cell.alignment = { vertical: 'middle', horizontal: 'center' };
+    cell.border = {
+      top:    { style: 'thin', color: { argb: 'FF1E40AF' } },
+      left:   { style: 'thin', color: { argb: 'FF1E40AF' } },
+      bottom: { style: 'thin', color: { argb: 'FF1E40AF' } },
+      right:  { style: 'thin', color: { argb: 'FF1E40AF' } }
+    };
+  });
+  headerRow.height = 22;
+
+  const sampleRow = sheet.addRow(['', '', '', '', '']);
+  sampleRow.eachCell({ includeEmpty: true }, cell => { cell.numFmt = '@'; });
+
+  ['A','B','C','D','E'].forEach(col => {
+    sheet.getColumn(col).numFmt = '@';
+  });
+
+  const buffer = await workbook.xlsx.writeBuffer();
+  const blob = new Blob([buffer], { type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'JHS_Inventory_Template.xlsx';
+  document.body.appendChild(a);
+  a.click();
+  document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+  toast('Inventory template (.xlsx) downloaded! Open in Excel to fill data.', 'success');
+}
+
+// =====================================================
+// Show Column-Mismatch Error Dialog
+// =====================================================
+function showColumnMismatchError(expectedCols, foundCols) {
+  const overlay = document.createElement("div");
+  overlay.id = "__mismatch_overlay__";
+  overlay.className = "fixed inset-0 bg-black/60 z-[99999] flex items-center justify-center";
+  overlay.style.backdropFilter = "blur(4px)";
+
+  overlay.innerHTML = `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-lg mx-4 transform transition-all duration-200 scale-95 opacity-0" id="__mismatch_box__">
+      <div class="flex items-center gap-4 mb-5">
+        <div class="w-12 h-12 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center flex-shrink-0">
+          <i class="fa-solid fa-triangle-exclamation text-red-600 dark:text-red-400 text-xl"></i>
+        </div>
+        <div>
+          <h3 class="text-lg font-bold text-gray-900 dark:text-white">Column Mismatch — Value Mismatched</h3>
+          <p class="text-sm text-gray-500 dark:text-gray-400">The uploaded file headers do not match the expected format.</p>
+        </div>
+      </div>
+      <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4 mb-5 text-sm space-y-3">
+        <div>
+          <p class="font-semibold text-green-700 dark:text-green-400 mb-1"><i class="fa-solid fa-circle-check mr-1"></i>Expected columns:</p>
+          <p class="text-gray-700 dark:text-gray-300 font-mono text-xs bg-white dark:bg-gray-800 p-2 rounded-lg border border-green-200 dark:border-green-800">${expectedCols.map(c => `"${c}"`).join(", ")}</p>
+        </div>
+        <div>
+          <p class="font-semibold text-red-700 dark:text-red-400 mb-1"><i class="fa-solid fa-circle-xmark mr-1"></i>Found in file:</p>
+          <p class="text-gray-700 dark:text-gray-300 font-mono text-xs bg-white dark:bg-gray-800 p-2 rounded-lg border border-red-200 dark:border-red-800">${foundCols.map(c => `"${c}"`).join(", ")}</p>
+        </div>
+      </div>
+      <p class="text-xs text-gray-500 dark:text-gray-400 mb-5">Please use the <strong>Export Format</strong> button to download the correct template, fill it in Excel, and upload again.</p>
+      <div class="flex justify-end">
+        <button id="__mismatch_close__" class="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">OK, Got it</button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  requestAnimationFrame(() => {
+    const box = document.getElementById("__mismatch_box__");
+    box.style.transform = "scale(1)";
+    box.style.opacity = "1";
+  });
+
+  function close() { overlay.remove(); }
+  document.getElementById("__mismatch_close__").addEventListener("click", close);
+  overlay.addEventListener("click", e => { if (e.target === overlay) close(); });
+}
+
+// =====================================================
+// Parse CSV text → array of objects
+// =====================================================
+function parseCSV(text) {
+  const lines = text.replace(/\r\n/g, "\n").replace(/\r/g, "\n").split("\n").filter(l => l.trim());
+  if (lines.length < 1) return { headers: [], rows: [] };
+
+  // Parse a single CSV line respecting quoted fields
+  function parseLine(line) {
+    const result = [];
+    let cur = "", inQuote = false;
+    for (let i = 0; i < line.length; i++) {
+      const ch = line[i];
+      if (ch === '"') { inQuote = !inQuote; }
+      else if (ch === "," && !inQuote) { result.push(cur.trim()); cur = ""; }
+      else { cur += ch; }
+    }
+    result.push(cur.trim());
+    return result;
+  }
+
+  const headers = parseLine(lines[0]);
+  const rows = lines.slice(1).map(l => parseLine(l));
+  return { headers, rows };
+}
+
+// =====================================================
+// Handle Employee Entry CSV Upload
+// Expected columns (exact, case-sensitive):
+//   JHS Code, Date, Name, Contact No, Model, Processor, RAM, SSD, Mouse, Other
+// =====================================================
+function handleEmployeeUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const EXPECTED = ["JHS Code", "Date", "Name", "Contact No", "Model", "Processor", "RAM", "SSD", "Mouse", "Other"];
+  const statusEl = document.getElementById("employeeUploadStatus");
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    // Strip UTF-8 BOM if present
+    let text = e.target.result.replace(/^\uFEFF/, "");
+    const { headers, rows } = parseCSV(text);
+
+    // Strict column validation
+    const headersMatch = headers.length === EXPECTED.length && headers.every((h, i) => h === EXPECTED[i]);
+    if (!headersMatch) {
+      showColumnMismatchError(EXPECTED, headers);
+      event.target.value = ""; // reset input
+      if (statusEl) statusEl.textContent = "";
+      return;
+    }
+
+    // Clear existing rows from tbody
+    const tbody = document.querySelector("#addTable tbody");
+    tbody.innerHTML = "";
+    rowCount = 0;
+
+    // Populate table with uploaded data
+    rows.forEach((row, idx) => {
+      // Skip completely empty rows
+      if (row.every(cell => !cell.trim())) return;
+      rowCount++;
+      const tr = document.createElement("tr");
+      tr.className = "bg-blue-50/30 dark:bg-gray-800/50";
+      tr.innerHTML = `
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600">${rowCount}</td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+          <button onclick="openModalForRow(${rowCount - 1})" class="text-blue-600 hover:text-blue-800">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter JHS Code" value="${escVal(row[0])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="date" value="${escVal(row[1])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter Name" value="${escVal(row[2])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="tel" placeholder="Enter Contact No" value="${escVal(row[3])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="e.g. Dell Latitude 5520" value="${escVal(row[4])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Processor" value="${escVal(row[5])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="RAM" value="${escVal(row[6])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="SSD" value="${escVal(row[7])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Mouse" value="${escVal(row[8])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Other" value="${escVal(row[9])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+          <button onclick="removeRow(this)" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">Remove</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    if (statusEl) statusEl.textContent = `✓ ${rowCount} row${rowCount !== 1 ? "s" : ""} loaded from "${file.name}"`;
+    toast(`${rowCount} row${rowCount !== 1 ? "s" : ""} loaded from CSV. Click Save All Entries to save.`, "success");
+    event.target.value = ""; // reset so same file can be re-uploaded
+  };
+  reader.readAsText(file, "UTF-8");
+}
+
+// =====================================================
+// Handle Inventory CSV Upload
+// Expected columns (exact, case-sensitive):
+//   JHS Tag, Brand, Processor, RAM, SSD
+// =====================================================
+function handleInventoryUpload(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+
+  const EXPECTED = ["JHS Tag", "Brand", "Processor", "RAM", "SSD"];
+  const statusEl = document.getElementById("inventoryUploadStatus");
+
+  const reader = new FileReader();
+  reader.onload = function(e) {
+    let text = e.target.result.replace(/^\uFEFF/, "");
+    const { headers, rows } = parseCSV(text);
+
+    const headersMatch = headers.length === EXPECTED.length && headers.every((h, i) => h === EXPECTED[i]);
+    if (!headersMatch) {
+      showColumnMismatchError(EXPECTED, headers);
+      event.target.value = "";
+      if (statusEl) statusEl.textContent = "";
+      return;
+    }
+
+    const tbody = document.querySelector("#inventoryAddTable tbody");
+    tbody.innerHTML = "";
+    inventoryRowCount = 0;
+
+    rows.forEach((row, idx) => {
+      if (row.every(cell => !cell.trim())) return;
+      inventoryRowCount++;
+      const tr = document.createElement("tr");
+      tr.className = "bg-blue-50/30 dark:bg-gray-800/50";
+      tr.innerHTML = `
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600">${inventoryRowCount}</td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+          <button onclick="openInventoryModalForRow(${inventoryRowCount - 1})" class="text-blue-600 hover:text-blue-800">
+            <i class="fa-solid fa-eye"></i>
+          </button>
+        </td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter JHS Tag" value="${escVal(row[0])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Enter Brand" value="${escVal(row[1])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="Processor" value="${escVal(row[2])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="RAM" value="${escVal(row[3])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600"><input type="text" placeholder="SSD" value="${escVal(row[4])}" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200"></td>
+        <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+          <button onclick="removeInventoryRow(this)" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">Remove</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+
+    if (statusEl) statusEl.textContent = `✓ ${inventoryRowCount} row${inventoryRowCount !== 1 ? "s" : ""} loaded from "${file.name}"`;
+    toast(`${inventoryRowCount} row${inventoryRowCount !== 1 ? "s" : ""} loaded from CSV. Click Save All Entries to save.`, "success");
+    event.target.value = "";
+  };
+  reader.readAsText(file, "UTF-8");
+}
+
+// =====================================================
+// Helper: escape value for use in HTML attribute
+// =====================================================
+function escVal(v) {
+  if (!v) return "";
+  return String(v).replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+// =====================================================
 // Utility: API fetch wrapper
 // =====================================================
 async function apiFetch(path, options = {}) {
@@ -3565,14 +3896,14 @@ function showConfirmDialog(title, message, iconClass, onConfirm) {
 
   overlay.innerHTML = `
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-sm mx-4 text-center transform transition-all duration-200 scale-95 opacity-0" id="__confirm_box__">
-      <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
-        <i class="fa-solid ${iconClass || 'fa-question'} text-red-600 dark:text-red-400 text-2xl"></i>
+      <div class="w-16 h-16 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mx-auto mb-4">
+        <i class="fa-solid ${iconClass || 'fa-question'} text-blue-600 dark:text-blue-400 text-2xl"></i>
       </div>
       <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${title}</h3>
       <p class="text-gray-600 dark:text-gray-400 mb-6">${message}</p>
       <div class="flex gap-3 justify-center">
         <button id="__confirm_cancel__" class="px-6 py-2.5 rounded-xl border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 font-semibold hover:bg-gray-100 dark:hover:bg-gray-700 transition">Cancel</button>
-        <button id="__confirm_ok__" class="px-6 py-2.5 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition">Confirm</button>
+        <button id="__confirm_ok__" class="px-6 py-2.5 rounded-xl bg-blue-600 text-white font-semibold hover:bg-blue-700 transition">Confirm</button>
       </div>
     </div>
   `;
@@ -3617,10 +3948,21 @@ function backToLaptopCards() {
   document.getElementById("laptopCardsSection").classList.remove("hidden");
   document.getElementById("employeeEntrySection").classList.add("hidden");
   document.getElementById("laptopInventorySection").classList.add("hidden");
+  document.getElementById("exitEmployeeSection").classList.add("hidden");
 }
 
-// =====================================================
-// Employee Entry Tabs
+function showExitEmployee() {
+  document.getElementById("laptopCardsSection").classList.add("hidden");
+  document.getElementById("employeeEntrySection").classList.add("hidden");
+  document.getElementById("laptopInventorySection").classList.add("hidden");
+  document.getElementById("exitEmployeeSection").classList.remove("hidden");
+  // Reset form
+  document.getElementById("exitJhsCode").value = "";
+  document.getElementById("exitDate").value = "";
+  document.getElementById("exitDoneBy").value = "";
+  document.getElementById("exitRemarks").value = "";
+}
+
 // =====================================================
 document.addEventListener("DOMContentLoaded", function () {
   document.querySelectorAll(".employee-tab-btn").forEach(function (btn) {
@@ -3697,46 +4039,46 @@ function addNewRow() {
   rowCount++;
   const tbody = document.querySelector("#addTable tbody");
   const tr = document.createElement("tr");
-  tr.className = "bg-red-50/50 dark:bg-gray-800/50";
+  tr.className = "bg-blue-50/30 dark:bg-gray-800/50";
   tr.innerHTML = `
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">${rowCount}</td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600 text-xs">${rowCount}</td>
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
       <button onclick="openModalForRow(${rowCount - 1})" class="text-blue-600 hover:text-blue-800">
         <i class="fa-solid fa-eye"></i>
       </button>
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="Enter JHS Code" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="Enter JHS Code" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="date" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="date" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="Enter Name" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="Enter Name" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="tel" placeholder="Enter Contact No" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="tel" placeholder="Enter Contact No" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="e.g. Dell Latitude 5520" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="e.g. Dell Latitude 5520" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="Processor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="Processor" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="RAM" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="RAM" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="SSD" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="SSD" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="Mouse" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="Mouse" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="Other" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="Other" class="w-full p-1.5 text-xs border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <button onclick="removeRow(this)" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">Remove</button>
+    <td class="p-2 border-t border-blue-100 dark:border-gray-600">
+      <button onclick="removeRow(this)" class="bg-red-600 text-white px-2 py-1 rounded-lg text-xs hover:bg-red-700 transition">Remove</button>
     </td>
   `;
   tbody.appendChild(tr);
@@ -3839,37 +4181,60 @@ function renderHistoryTable(entries) {
   const tbody = document.getElementById("laptopEntriesTableBody");
 
   if (entries.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="12" class="p-6 text-center text-gray-500">No entries found.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="14" class="p-6 text-center text-gray-500">No entries found.</td></tr>`;
     return;
   }
 
   tbody.innerHTML = "";
   entries.forEach(function (entry, index) {
     const tr = document.createElement("tr");
-    tr.className = index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-red-50/30 dark:bg-gray-700/30";
+    tr.className = index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-blue-50/30 dark:bg-gray-700/30";
 
-    let statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">—</span>`;
+    let statusBadge = `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">—</span>`;
     if (entry.status === "IN") {
-      statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">IN</span>`;
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300">IN</span>`;
     } else if (entry.status === "Out") {
-      statusBadge = `<span class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">Out</span>`;
+      statusBadge = `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300">Out</span>`;
     }
 
+    // Parse exit details from the `other` field (set by exit endpoint)
+    // Format: "Exit processed by: NAME | Exit date: DATE | Remarks: REMARKS"
+    let exitDate = "—", exitDoneBy = "—", exitRemarks = "—";
+    if (entry.status === "Out" && entry.other) {
+      const parts = entry.other.split(" | ");
+      parts.forEach(function(p) {
+        const lower = p.trim().toLowerCase();
+        if (lower.startsWith("exit processed by:")) {
+          exitDoneBy = p.replace(/exit processed by:/i, "").trim() || "—";
+        } else if (lower.startsWith("exit date:")) {
+          exitDate = p.replace(/exit date:/i, "").trim() || "—";
+        } else if (lower.startsWith("remarks:")) {
+          exitRemarks = p.replace(/remarks:/i, "").trim() || "—";
+        }
+      });
+    }
+
+    const exitCellClass = entry.status === "Out"
+      ? "p-2 text-xs font-medium text-amber-700 dark:text-amber-400 bg-yellow-50/60 dark:bg-yellow-900/10"
+      : "p-2 text-xs text-gray-400 dark:text-gray-600";
+
     tr.innerHTML = `
-      <td class="p-4 text-gray-700 dark:text-gray-300 font-medium">${entry.jhs_code}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.date || "—"}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.name || "—"}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.contact_no || "—"}</td>
-      <td class="p-4">${statusBadge}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.model || "—"}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.processor || "—"}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.ram || "—"}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.ssd || "—"}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.mouse || "—"}</td>
-      <td class="p-4 text-gray-700 dark:text-gray-300">${entry.other || "—"}</td>
-      <td class="p-4">
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300 font-medium">${entry.jhs_code}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300">${entry.date || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300">${entry.name || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300">${entry.contact_no || "—"}</td>
+      <td class="p-2">${statusBadge}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300">${entry.model || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300">${entry.processor || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300">${entry.ram || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300">${entry.ssd || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300">${entry.mouse || "—"}</td>
+      <td class="${exitCellClass}">${exitDate}</td>
+      <td class="${exitCellClass}">${exitDoneBy}</td>
+      <td class="${exitCellClass} max-w-[160px] truncate" title="${exitRemarks}">${exitRemarks}</td>
+      <td class="p-2">
         <button onclick="deleteEntry('${entry.jhs_code}')"
-          class="bg-red-600 text-white px-3 py-1 rounded-lg text-sm hover:bg-red-700 transition">
+          class="bg-red-600 text-white px-2 py-1 rounded-lg text-xs hover:bg-red-700 transition">
           Delete
         </button>
       </td>
@@ -3882,17 +4247,33 @@ function renderHistoryTable(entries) {
 // History Search
 // =====================================================
 function filterHistory() {
-  const q = (document.getElementById("historySearch")?.value || "").toLowerCase().trim();
-  if (!q) { renderHistoryTable(_allLaptopEntries); return; }
-  const filtered = _allLaptopEntries.filter(e =>
-    (e.jhs_code   || "").toLowerCase().includes(q) ||
-    (e.name       || "").toLowerCase().includes(q) ||
-    (e.contact_no || "").toLowerCase().includes(q) ||
-    (e.status     || "").toLowerCase().includes(q) ||
-    (e.date       || "").toLowerCase().includes(q) ||
-    (e.model      || "").toLowerCase().includes(q) ||
-    (e.processor  || "").toLowerCase().includes(q)
-  );
+  const q        = (document.getElementById("historySearch")?.value    || "").toLowerCase().trim();
+  const dateFrom = (document.getElementById("historyDateFrom")?.value  || "");
+  const dateTo   = (document.getElementById("historyDateTo")?.value    || "");
+
+  let filtered = _allLaptopEntries;
+
+  // Text search
+  if (q) {
+    filtered = filtered.filter(e =>
+      (e.jhs_code   || "").toLowerCase().includes(q) ||
+      (e.name       || "").toLowerCase().includes(q) ||
+      (e.contact_no || "").toLowerCase().includes(q) ||
+      (e.status     || "").toLowerCase().includes(q) ||
+      (e.date       || "").toLowerCase().includes(q) ||
+      (e.model      || "").toLowerCase().includes(q) ||
+      (e.processor  || "").toLowerCase().includes(q)
+    );
+  }
+
+  // Date-range filter (uses entry.date field)
+  if (dateFrom) {
+    filtered = filtered.filter(e => e.date && e.date >= dateFrom);
+  }
+  if (dateTo) {
+    filtered = filtered.filter(e => e.date && e.date <= dateTo);
+  }
+
   renderHistoryTable(filtered);
 }
 
@@ -3915,6 +4296,191 @@ async function deleteEntry(jhsCode) {
       }
     }
   );
+}
+
+// =====================================================
+// Exit Employee — JHS Code Live Suggestions
+// =====================================================
+function populateExitSuggestions() {
+  const input    = document.getElementById("exitJhsCode");
+  const dropdown = document.getElementById("exitJhsDropdown");
+  if (!input || !dropdown) return;
+
+  const query = input.value.trim().toLowerCase();
+  dropdown.innerHTML = "";
+
+  if (!query || !_allLaptopEntries.length) {
+    dropdown.classList.add("hidden");
+    return;
+  }
+
+  const matches = _allLaptopEntries.filter(e =>
+    (e.jhs_code || "").toLowerCase().includes(query) ||
+    (e.name     || "").toLowerCase().includes(query)
+  ).slice(0, 10);
+
+  if (matches.length === 0) {
+    dropdown.classList.add("hidden");
+    return;
+  }
+
+  matches.forEach(function(e) {
+    const li = document.createElement("li");
+    li.className = "px-4 py-2 cursor-pointer hover:bg-blue-50 dark:hover:bg-blue-900/30 flex justify-between items-center";
+    li.innerHTML = `
+      <span class="font-semibold text-blue-800 dark:text-blue-300 text-xs">${e.jhs_code}</span>
+      <span class="text-gray-500 dark:text-gray-400 text-xs ml-2">${e.name || ""}</span>
+      <span class="ml-auto text-xs px-1.5 py-0.5 rounded-full ${e.status === "IN" ? "bg-green-100 text-green-700" : "bg-yellow-100 text-yellow-700"}">${e.status || ""}</span>
+    `;
+    li.addEventListener("mousedown", function(ev) {
+      ev.preventDefault();
+      input.value = e.jhs_code;
+      dropdown.classList.add("hidden");
+    });
+    dropdown.appendChild(li);
+  });
+
+  dropdown.classList.remove("hidden");
+}
+
+// Hide dropdown when clicking outside
+document.addEventListener("click", function(e) {
+  const dropdown = document.getElementById("exitJhsDropdown");
+  const input    = document.getElementById("exitJhsCode");
+  if (dropdown && input && !input.contains(e.target) && !dropdown.contains(e.target)) {
+    dropdown.classList.add("hidden");
+  }
+});
+
+// Populate suggestions when Exit section becomes visible
+(function() {
+  const origShowExit = window.showExitEmployee;
+  window.showExitEmployee = function() {
+    if (origShowExit) origShowExit();
+    // Pre-load entries for suggestions if not already loaded
+    if (!_allLaptopEntries.length) {
+      apiFetch("/laptop-entries").then(function(data) {
+        _allLaptopEntries = data;
+      }).catch(function() {});
+    }
+  };
+})();
+
+// =====================================================
+// Export History to Excel
+// =====================================================
+async function exportHistoryExcel() {
+  // Get currently-filtered entries
+  const q        = (document.getElementById("historySearch")?.value    || "").toLowerCase().trim();
+  const dateFrom = (document.getElementById("historyDateFrom")?.value  || "");
+  const dateTo   = (document.getElementById("historyDateTo")?.value    || "");
+
+  let data = _allLaptopEntries;
+  if (q) {
+    data = data.filter(e =>
+      (e.jhs_code   || "").toLowerCase().includes(q) ||
+      (e.name       || "").toLowerCase().includes(q) ||
+      (e.contact_no || "").toLowerCase().includes(q) ||
+      (e.status     || "").toLowerCase().includes(q) ||
+      (e.date       || "").toLowerCase().includes(q) ||
+      (e.model      || "").toLowerCase().includes(q) ||
+      (e.processor  || "").toLowerCase().includes(q)
+    );
+  }
+  if (dateFrom) data = data.filter(e => e.date && e.date >= dateFrom);
+  if (dateTo)   data = data.filter(e => e.date && e.date <= dateTo);
+
+  if (!data.length) { toast("No data to export.", "warn"); return; }
+
+  try {
+    const workbook  = new ExcelJS.Workbook();
+    const sheet     = workbook.addWorksheet("Employee History");
+
+    // Header row
+    const headers = [
+      "JHS Code","Date","Name","Contact No","Status",
+      "Model","Processor","RAM","SSD","Mouse",
+      "Exit Date","Exit Done By","Exit Remarks"
+    ];
+    const headerRow = sheet.addRow(headers);
+    headerRow.eachCell(function(cell) {
+      cell.font      = { bold: true, color: { argb: "FFFFFFFF" }, size: 10 };
+      cell.fill      = { type: "pattern", pattern: "solid", fgColor: { argb: "FF2563EB" } };
+      cell.alignment = { vertical: "middle", horizontal: "center" };
+      cell.border    = { bottom: { style: "thin", color: { argb: "FF93C5FD" } } };
+    });
+    sheet.getRow(1).height = 20;
+
+    // Set column widths
+    const colWidths = [14,12,18,14,8,18,16,8,8,8,12,16,24];
+    colWidths.forEach((w, i) => { sheet.getColumn(i + 1).width = w; });
+
+    // Data rows
+    data.forEach(function(entry, idx) {
+      // Parse exit details
+      let exitDate = "", exitDoneBy = "", exitRemarks = "";
+      if (entry.status === "Out" && entry.other) {
+        entry.other.split(" | ").forEach(function(p) {
+          const lower = p.trim().toLowerCase();
+          if (lower.startsWith("exit processed by:"))  exitDoneBy  = p.replace(/exit processed by:/i, "").trim();
+          else if (lower.startsWith("exit date:"))     exitDate    = p.replace(/exit date:/i, "").trim();
+          else if (lower.startsWith("remarks:"))       exitRemarks = p.replace(/remarks:/i, "").trim();
+        });
+      }
+
+      const row = sheet.addRow([
+        entry.jhs_code   || "",
+        entry.date        || "",
+        entry.name        || "",
+        entry.contact_no  || "",
+        entry.status      || "",
+        entry.model       || "",
+        entry.processor   || "",
+        entry.ram         || "",
+        entry.ssd         || "",
+        entry.mouse       || "",
+        exitDate,
+        exitDoneBy,
+        exitRemarks
+      ]);
+
+      // Alternate row shading
+      const bg = idx % 2 === 0 ? "FFFFFFFF" : "FFEFF6FF";
+      row.eachCell(function(cell) {
+        cell.fill      = { type: "pattern", pattern: "solid", fgColor: { argb: bg } };
+        cell.font      = { size: 9 };
+        cell.alignment = { vertical: "middle" };
+      });
+
+      // Colour status cell
+      const statusCell = row.getCell(5);
+      if (entry.status === "IN") {
+        statusCell.font = { size: 9, bold: true, color: { argb: "FF166534" } };
+        statusCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFDCFCE7" } };
+      } else if (entry.status === "Out") {
+        statusCell.font = { size: 9, bold: true, color: { argb: "FF92400E" } };
+        statusCell.fill = { type: "pattern", pattern: "solid", fgColor: { argb: "FFFEF9C3" } };
+      }
+    });
+
+    // Generate file
+    const buffer   = await workbook.xlsx.writeBuffer();
+    const blob     = new Blob([buffer], { type: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" });
+    const url      = URL.createObjectURL(blob);
+    const a        = document.createElement("a");
+    const now      = new Date();
+    const stamp    = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,"0")}-${String(now.getDate()).padStart(2,"0")}`;
+    a.href         = url;
+    a.download     = `Employee_History_${stamp}.xlsx`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+    toast(`✓ Exported ${data.length} records to Excel.`, "success");
+  } catch (err) {
+    console.error("Export error:", err);
+    toast("Export failed. See console for details.", "error");
+  }
 }
 
 // =====================================================
@@ -3973,8 +4539,8 @@ function renderUpdateTable(entries) {
     const tr = document.createElement("tr");
     tr.className = [
       "cursor-pointer transition-colors duration-100 group",
-      index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-red-50/40 dark:bg-gray-700/40",
-      "hover:bg-red-100 dark:hover:bg-red-900/30"
+      index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-blue-50/40 dark:bg-gray-700/40",
+      "hover:bg-blue-100 dark:hover:bg-blue-900/30"
     ].join(" ");
 
     let statusBadge = `<span class="px-2 py-0.5 rounded-full text-xs font-semibold bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400">—</span>`;
@@ -3985,25 +4551,25 @@ function renderUpdateTable(entries) {
     }
 
     tr.innerHTML = `
-      <td class="p-3 text-sm font-semibold text-red-700 dark:text-red-300 group-hover:text-red-800 whitespace-nowrap">
+      <td class="p-2 text-xs font-semibold text-blue-900 dark:text-blue-300 group-hover:text-blue-700 whitespace-nowrap">
         <i class="fa-solid fa-pen-to-square text-xs mr-1 opacity-0 group-hover:opacity-100 transition-opacity"></i>${entry.jhs_code}
       </td>
-      <td class="p-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">${entry.date || "—"}</td>
-      <td class="p-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">${entry.name || "—"}</td>
-      <td class="p-3 text-sm text-gray-700 dark:text-gray-300 whitespace-nowrap">${entry.contact_no || "—"}</td>
-      <td class="p-3">${statusBadge}</td>
-      <td class="p-3 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.model || "—"}</td>
-      <td class="p-3 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.processor || "—"}</td>
-      <td class="p-3 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.ram || "—"}</td>
-      <td class="p-3 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.ssd || "—"}</td>
-      <td class="p-3 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.mouse || "—"}</td>
-      <td class="p-3 text-sm text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.other || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300 whitespace-nowrap">${entry.date || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300 whitespace-nowrap">${entry.name || "—"}</td>
+      <td class="p-2 text-xs text-gray-700 dark:text-gray-300 whitespace-nowrap">${entry.contact_no || "—"}</td>
+      <td class="p-2">${statusBadge}</td>
+      <td class="p-2 text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.model || "—"}</td>
+      <td class="p-2 text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.processor || "—"}</td>
+      <td class="p-2 text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.ram || "—"}</td>
+      <td class="p-2 text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.ssd || "—"}</td>
+      <td class="p-2 text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.mouse || "—"}</td>
+      <td class="p-2 text-xs text-gray-600 dark:text-gray-400 whitespace-nowrap">${entry.other || "—"}</td>
     `;
 
     tr.addEventListener("click", function () {
       loadEntryIntoForm(entry);
-      document.querySelectorAll("#updateEntriesTableBody tr").forEach(r => r.classList.remove("ring-2", "ring-red-500", "ring-inset"));
-      tr.classList.add("ring-2", "ring-red-500", "ring-inset");
+      document.querySelectorAll("#updateEntriesTableBody tr").forEach(r => r.classList.remove("ring-2", "ring-blue-500", "ring-inset"));
+      tr.classList.add("ring-2", "ring-blue-500", "ring-inset");
     });
 
     tbody.appendChild(tr);
@@ -4050,7 +4616,7 @@ function loadEntryIntoForm(entry) {
 
 function cancelUpdate() {
   document.getElementById("updateFormContainer").classList.add("hidden");
-  document.querySelectorAll("#updateEntriesTableBody tr").forEach(r => r.classList.remove("ring-2", "ring-red-500", "ring-inset"));
+  document.querySelectorAll("#updateEntriesTableBody tr").forEach(r => r.classList.remove("ring-2", "ring-blue-500", "ring-inset"));
 }
 
 async function saveUpdate() {
@@ -4158,30 +4724,30 @@ function addInventoryRow() {
   inventoryRowCount++;
   const tbody = document.querySelector("#inventoryAddTable tbody");
   const tr = document.createElement("tr");
-  tr.className = "bg-red-50/50 dark:bg-gray-800/50";
+  tr.className = "bg-blue-50/30 dark:bg-gray-800/50";
   tr.innerHTML = `
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">${inventoryRowCount}</td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
+    <td class="p-4 border-t border-blue-100 dark:border-gray-600">${inventoryRowCount}</td>
+    <td class="p-4 border-t border-blue-100 dark:border-gray-600">
       <button onclick="openInventoryModalForRow(${inventoryRowCount - 1})" class="text-blue-600 hover:text-blue-800">
         <i class="fa-solid fa-eye"></i>
       </button>
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="Enter JHS Tag" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="Enter JHS Tag" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="Enter Brand" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="Enter Brand" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="Processor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="Processor" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="RAM" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="RAM" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
-      <input type="text" placeholder="SSD" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-red-500 dark:bg-gray-700 dark:text-gray-200">
+    <td class="p-4 border-t border-blue-100 dark:border-gray-600">
+      <input type="text" placeholder="SSD" class="w-full p-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 dark:bg-gray-700 dark:text-gray-200">
     </td>
-    <td class="p-4 border-t border-red-200 dark:border-gray-600">
+    <td class="p-4 border-t border-blue-100 dark:border-gray-600">
       <button onclick="removeInventoryRow(this)" class="bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition">Remove</button>
     </td>
   `;
@@ -4274,7 +4840,7 @@ async function loadInventoryEntries() {
   tbody.innerHTML = "";
   entries.forEach(function (entry, index) {
     const tr = document.createElement("tr");
-    tr.className = index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-red-50/30 dark:bg-gray-700/30";
+    tr.className = index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-blue-50/30 dark:bg-gray-700/30";
     tr.innerHTML = `
       <td class="p-4 text-gray-700 dark:text-gray-300 font-medium">${entry.jhs_tag}</td>
       <td class="p-4 text-gray-700 dark:text-gray-300">${entry.brand || "—"}</td>
@@ -4451,7 +5017,7 @@ async function loadRepairEntries() {
   tbody.innerHTML = "";
   entries.forEach(function (entry, index) {
     const tr = document.createElement("tr");
-    tr.className = index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-red-50/30 dark:bg-gray-700/30";
+    tr.className = index % 2 === 0 ? "bg-white dark:bg-gray-800" : "bg-blue-50/30 dark:bg-gray-700/30";
 
     const statusColors = {
       "In Repair":   "bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300",
@@ -4539,4 +5105,122 @@ async function deleteRepairEntry(repairId) {
       }
     }
   );
+}
+
+// =====================================================
+// Exit Employee — Confirm Exit
+// =====================================================
+async function confirmEmployeeExit() {
+  const jhsCode  = (document.getElementById("exitJhsCode")?.value  || "").trim();
+  const exitDate = (document.getElementById("exitDate")?.value      || "").trim();
+  const doneBy   = (document.getElementById("exitDoneBy")?.value    || "").trim();
+  const remarks  = (document.getElementById("exitRemarks")?.value   || "").trim();
+
+  // --- Validation (all except remarks are required) ---
+  if (!jhsCode) {
+    toast("JHS Code is required.", "error");
+    document.getElementById("exitJhsCode").focus();
+    return;
+  }
+  if (!exitDate) {
+    toast("Exit Date is required.", "error");
+    document.getElementById("exitDate").focus();
+    return;
+  }
+  if (!doneBy) {
+    toast("'Who Done Exit Process' is required.", "error");
+    document.getElementById("exitDoneBy").focus();
+    return;
+  }
+
+  // --- Confirm dialog before calling API ---
+  showConfirmDialog(
+    "Confirm Exit",
+    `Are you sure you want to exit employee with JHS Code <strong>${jhsCode}</strong>? Their status will be set to <strong>Out</strong>.`,
+    "fa-right-from-bracket",
+    async function () {
+      const btn = document.getElementById("confirmExitBtn");
+      if (btn) { btn.disabled = true; btn.textContent = "Processing\u2026"; }
+
+      try {
+        await apiFetch(`/laptop-entries/${encodeURIComponent(jhsCode)}/exit`, {
+          method: "POST",
+          body: JSON.stringify({
+            exit_date: exitDate,
+            done_by:   doneBy,
+            remarks:   remarks
+          })
+        });
+
+        toast(`\u2713 Employee ${jhsCode} exit confirmed. Status set to Out.`, "success");
+
+        // Reset form
+        document.getElementById("exitJhsCode").value = "";
+        document.getElementById("exitDate").value    = "";
+        document.getElementById("exitDoneBy").value  = "";
+        document.getElementById("exitRemarks").value = "";
+
+      } catch (e) {
+        // 409 = already exited, 404 = not found
+        if (e.message && e.message.includes("already exited")) {
+          showExitErrorPopup(
+            "Already Exited",
+            `JHS Code <strong>${jhsCode}</strong> already has status <strong>Out</strong>. Re-assign with status IN before processing a new exit.`,
+            "fa-triangle-exclamation"
+          );
+        } else if (e.message && e.message.includes("not found")) {
+          showExitErrorPopup(
+            "JHS Code Not Found",
+            `No employee entry found for JHS Code <strong>${jhsCode}</strong>. Please check the code and try again.`,
+            "fa-circle-exclamation"
+          );
+        } else {
+          toast(`Exit failed: ${e.message}`, "error");
+        }
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-right-from-bracket"></i> Confirm Exit';
+        }
+      }
+    }
+  );
+}
+
+// =====================================================
+// Exit Employee — Error / Already Exited Popup
+// =====================================================
+function showExitErrorPopup(title, message, iconClass) {
+  const existing = document.getElementById("__exit_error_overlay__");
+  if (existing) existing.remove();
+
+  const overlay = document.createElement("div");
+  overlay.id = "__exit_error_overlay__";
+  overlay.className = "fixed inset-0 bg-black/60 z-[99998] flex items-center justify-center";
+  overlay.style.backdropFilter = "blur(4px)";
+
+  overlay.innerHTML = `
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 w-full max-w-sm mx-4 text-center transform transition-all duration-200 scale-95 opacity-0" id="__exit_error_box__">
+      <div class="w-16 h-16 rounded-full bg-red-100 dark:bg-red-900/30 flex items-center justify-center mx-auto mb-4">
+        <i class="fa-solid ${iconClass || 'fa-triangle-exclamation'} text-red-600 dark:text-red-400 text-2xl"></i>
+      </div>
+      <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">${title}</h3>
+      <p class="text-gray-600 dark:text-gray-400 mb-6 text-sm leading-relaxed">${message}</p>
+      <button id="__exit_error_close__"
+        class="px-8 py-2.5 rounded-xl bg-red-600 text-white font-semibold hover:bg-red-700 transition shadow">
+        OK
+      </button>
+    </div>
+  `;
+  document.body.appendChild(overlay);
+
+  requestAnimationFrame(() => {
+    const box = document.getElementById("__exit_error_box__");
+    box.style.transform = "scale(1)";
+    box.style.opacity   = "1";
+  });
+
+  function close() { overlay.remove(); }
+  document.getElementById("__exit_error_close__").addEventListener("click", close);
+  overlay.addEventListener("click", e => { if (e.target === overlay) close(); });
 }
